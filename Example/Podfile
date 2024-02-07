@@ -1,0 +1,6 @@
+use_frameworks!
+target 'OpenAIAssistantsAPI_Tests' do
+  pod 'OpenAIAssistantsAPI', :path => '../'
+  
+  
+end

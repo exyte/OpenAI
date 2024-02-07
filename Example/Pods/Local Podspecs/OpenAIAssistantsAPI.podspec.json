@@ -1,0 +1,22 @@
+{
+  "name": "OpenAIAssistantsAPI",
+  "version": "0.1.0",
+  "summary": "A short description of OpenAIAssistantsAPI.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/Dmitry Shipinev/OpenAIAssistantsAPI",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Dmitry Shipinev": "dmitry.shipinev+git@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/Dmitry Shipinev/OpenAIAssistantsAPI.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "10.0"
+  },
+  "source_files": "OpenAIAssistantsAPI/Classes/**/*"
+}
