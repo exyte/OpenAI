@@ -36,7 +36,7 @@ extension Threads: TargetType {
         case .createThread:
             return "/threads"
         case .retreiveThread(let threadId), .modifyThread(let threadId, _), .deleteThread(let threadId):
-            return "/thread/\(threadId)"
+            return "/threads/\(threadId)"
         }
     }
 
