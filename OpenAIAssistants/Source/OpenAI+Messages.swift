@@ -28,7 +28,7 @@ public extension OpenAI {
             .eraseToAnyPublisher()
     }
 
-    func retreiveMessage(id: String, from threadId: String) -> AnyPublisher<Message, MoyaError> {
+    func retrieveMessage(id: String, from threadId: String) -> AnyPublisher<Message, MoyaError> {
         messagesProvider.requestPublisher(
             .retrieveMessage(
                 threadId: threadId,
@@ -63,7 +63,7 @@ public extension OpenAI {
             .eraseToAnyPublisher()
     }
 
-    func retreiveMessageFile(id: String, from messageId: String, in threadId: String) -> AnyPublisher<MessageFile, MoyaError> {
+    func retrieveMessageFile(id: String, from messageId: String, in threadId: String) -> AnyPublisher<MessageFile, MoyaError> {
         messagesProvider.requestPublisher(
             .retrieveMessageFile(
                 threadId: threadId,

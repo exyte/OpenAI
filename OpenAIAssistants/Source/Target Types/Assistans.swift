@@ -12,12 +12,12 @@ enum Assistans {
 
     case createAssistant(payload: CreateAssistantPayload)
     case listAssistants(payload: ListPayload)
-    case retreiveAssistant(assistantId: String)
+    case retrieveAssistant(assistantId: String)
     case modifyAssistant(assistantId: String, payload: CreateAssistantPayload)
     case deleteAssistant(assistantId: String)
     case createAssistantFile(assistantId: String, payload: CreateAssistantFilePayload)
     case listAssistantFiles(assistantId: String, payload: ListPayload)
-    case retreiveAssistantFile(assistantId: String, fileId: String)
+    case retrieveAssistantFile(assistantId: String, fileId: String)
     case deleteAssistantFile(assistantId: String, fileId: String)
 
 }
@@ -40,11 +40,11 @@ extension Assistans: TargetType {
         switch self {
         case .createAssistant, .listAssistants:
             return "/assistants"
-        case .retreiveAssistant(let assistantId), .modifyAssistant(let assistantId, _), .deleteAssistant(let assistantId):
+        case .retrieveAssistant(let assistantId), .modifyAssistant(let assistantId, _), .deleteAssistant(let assistantId):
             return "/assistants/\(assistantId)"
         case .listAssistantFiles(let assistantId, _), .createAssistantFile(let assistantId, _):
             return "/assistants/\(assistantId)/files"
-        case .retreiveAssistantFile(let assistantId, let fileId), .deleteAssistantFile(let assistantId, let fileId):
+        case .retrieveAssistantFile(let assistantId, let fileId), .deleteAssistantFile(let assistantId, let fileId):
             return "/assistants/\(assistantId)/files/\(fileId)"
         }
     }
@@ -53,7 +53,7 @@ extension Assistans: TargetType {
         switch self {
         case .createAssistant, .modifyAssistant, .createAssistantFile:
             return .post
-        case .listAssistants, .listAssistantFiles, .retreiveAssistant, .retreiveAssistantFile:
+        case .listAssistants, .listAssistantFiles, .retrieveAssistant, .retrieveAssistantFile:
             return .get
         case .deleteAssistant, .deleteAssistantFile:
             return .delete
@@ -77,7 +77,7 @@ extension Assistans: TargetType {
             return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
         case .modifyAssistant(_, let payload):
             return .requestCustomJSONEncodable(payload, encoder: encoder)
-        case .retreiveAssistant, .deleteAssistant, .retreiveAssistantFile, .deleteAssistantFile:
+        case .retrieveAssistant, .deleteAssistant, .retrieveAssistantFile, .deleteAssistantFile:
             return .requestPlain
         case .createAssistantFile(_, let payload):
             return .requestCustomJSONEncodable(payload, encoder: encoder)

@@ -17,7 +17,7 @@ public extension OpenAI {
             .eraseToAnyPublisher()
     }
 
-    func retreiveModel(with id: String) -> AnyPublisher<Model, MoyaError> {
+    func retrieveModel(with id: String) -> AnyPublisher<Model, MoyaError> {
         modelsProvider.requestPublisher(.retrieveModel(modelId: id))
             .map(Model.self, using: defaultDecoder)
             .eraseToAnyPublisher()

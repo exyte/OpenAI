@@ -17,8 +17,8 @@ public extension OpenAI {
             .eraseToAnyPublisher()
     }
 
-    func retreiveThread(id: String) -> AnyPublisher<Thread, MoyaError> {
-        threadsProvider.requestPublisher(.retreiveThread(threadId: id))
+    func retrieveThread(id: String) -> AnyPublisher<Thread, MoyaError> {
+        threadsProvider.requestPublisher(.retrieveThread(threadId: id))
             .map(Thread.self, using: defaultDecoder)
             .eraseToAnyPublisher()
     }

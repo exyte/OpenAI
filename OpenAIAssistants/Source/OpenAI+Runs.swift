@@ -39,7 +39,7 @@ public extension OpenAI {
             .eraseToAnyPublisher()
     }
 
-    func retreiveRun(id: String, from threadId: String) -> AnyPublisher<Run, MoyaError> {
+    func retrieveRun(id: String, from threadId: String) -> AnyPublisher<Run, MoyaError> {
         runsProvider.requestPublisher(
             .retrieveRun(
                 threadId: threadId,
@@ -97,7 +97,7 @@ public extension OpenAI {
             .eraseToAnyPublisher()
     }
 
-    func retreiveRunStep(id: String, from runId: String, in threadId: String) -> AnyPublisher<Run, MoyaError> {
+    func retrieveRunStep(id: String, from runId: String, in threadId: String) -> AnyPublisher<Run, MoyaError> {
         runsProvider.requestPublisher(
             .retrieveRunStep(
                 threadId: threadId,

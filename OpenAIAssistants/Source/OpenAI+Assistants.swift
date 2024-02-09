@@ -40,8 +40,8 @@ public extension OpenAI {
             .eraseToAnyPublisher()
     }
 
-    func retreiveAssistant(id: String) -> AnyPublisher<Assistant, MoyaError> {
-        assistantsProvider.requestPublisher(.retreiveAssistant(assistantId: id))
+    func retrieveAssistant(id: String) -> AnyPublisher<Assistant, MoyaError> {
+        assistantsProvider.requestPublisher(.retrieveAssistant(assistantId: id))
             .map(Assistant.self, using: defaultDecoder)
             .eraseToAnyPublisher()
     }
@@ -79,9 +79,9 @@ public extension OpenAI {
             .eraseToAnyPublisher()
     }
 
-    func retreiveAssistantFile(id: String, from assistantId: String) -> AnyPublisher<AssistantFile, MoyaError> {
+    func retrieveAssistantFile(id: String, from assistantId: String) -> AnyPublisher<AssistantFile, MoyaError> {
         assistantsProvider.requestPublisher(
-            .retreiveAssistantFile(
+            .retrieveAssistantFile(
                 assistantId: assistantId,
                 fileId: id
             )

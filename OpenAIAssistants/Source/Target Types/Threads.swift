@@ -11,7 +11,7 @@ import Moya
 enum Threads {
 
     case createThread(payload: CreateThreadPayload)
-    case retreiveThread(threadId: String)
+    case retrieveThread(threadId: String)
     case modifyThread(threadId: String, payload: ModifyPayload)
     case deleteThread(threadId: String)
 
@@ -35,7 +35,7 @@ extension Threads: TargetType {
         switch self {
         case .createThread:
             return "/threads"
-        case .retreiveThread(let threadId), .modifyThread(let threadId, _), .deleteThread(let threadId):
+        case .retrieveThread(let threadId), .modifyThread(let threadId, _), .deleteThread(let threadId):
             return "/threads/\(threadId)"
         }
     }
@@ -44,7 +44,7 @@ extension Threads: TargetType {
         switch self {
         case .createThread, .modifyThread:
             return .post
-        case .retreiveThread:
+        case .retrieveThread:
             return .get
         case .deleteThread:
             return .delete
@@ -57,7 +57,7 @@ extension Threads: TargetType {
         switch self {
         case .createThread(let payload):
             return .requestCustomJSONEncodable(payload, encoder: encoder)
-        case .retreiveThread:
+        case .retrieveThread:
             return .requestPlain
         case .modifyThread(_, let payload):
             return .requestCustomJSONEncodable(payload, encoder: encoder)
