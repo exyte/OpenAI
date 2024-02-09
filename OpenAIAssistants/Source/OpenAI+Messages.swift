@@ -31,8 +31,8 @@ public extension OpenAI {
     func retreiveMessage(id: String, from threadId: String) -> AnyPublisher<Message, MoyaError> {
         messagesProvider.requestPublisher(
             .retrieveMessage(
-                threadId: id,
-                messageId: threadId
+                threadId: threadId,
+                messageId: id
             )
         )
             .map(Message.self, using: defaultDecoder)
