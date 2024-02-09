@@ -19,6 +19,14 @@ enum Messages {
 
 }
 
+extension Messages: AccessTokenAuthorizable {
+
+    var authorizationType: Moya.AuthorizationType? {
+        .bearer
+    }
+
+}
+
 extension Messages: TargetType {
 
     var baseURL: URL {

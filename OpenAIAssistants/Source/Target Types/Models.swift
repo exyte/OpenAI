@@ -16,6 +16,14 @@ enum Models {
 
 }
 
+extension Models: AccessTokenAuthorizable {
+
+    var authorizationType: Moya.AuthorizationType? {
+        .bearer
+    }
+
+}
+
 extension Models: TargetType {
 
     var baseURL: URL {

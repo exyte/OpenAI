@@ -22,6 +22,14 @@ enum Assistans {
 
 }
 
+extension Assistans: AccessTokenAuthorizable {
+
+    var authorizationType: Moya.AuthorizationType? {
+        .bearer
+    }
+
+}
+
 extension Assistans: TargetType {
 
     var baseURL: URL {

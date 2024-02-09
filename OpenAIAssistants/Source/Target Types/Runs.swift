@@ -22,6 +22,14 @@ enum Runs {
 
 }
 
+extension Runs: AccessTokenAuthorizable {
+
+    var authorizationType: Moya.AuthorizationType? {
+        .bearer
+    }
+
+}
+
 extension Runs: TargetType {
 
     var baseURL: URL {
