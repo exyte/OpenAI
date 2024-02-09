@@ -11,13 +11,13 @@ public struct Model: Codable {
 
     public let id: String
     public let object: String
-    public let createdAt: Date
+    public let created: Date
     public let ownedBy: String
 
-    public init(id: String, object: String, createdAt: Date, ownedBy: String) {
+    public init(id: String, object: String, created: Date, ownedBy: String) {
         self.id = id
         self.object = object
-        self.createdAt = createdAt
+        self.created = created
         self.ownedBy = ownedBy
     }
     

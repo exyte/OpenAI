@@ -17,7 +17,7 @@ public struct Run: Codable {
     public let status: RunStatus
     public let requiredAction: RequiredAction?
     public let lastError: RunError?
-    public let expiresAt: Date
+    public let expiresAt: Date?
     public let startedAt: Date?
     public let cancelledAt: Date?
     public let failedAt: Date?
@@ -38,7 +38,7 @@ public struct Run: Codable {
         status: RunStatus,
         requiredAction: RequiredAction? = nil,
         lastError: RunError? = nil,
-        expiresAt: Date,
+        expiresAt: Date? = nil,
         startedAt: Date? = nil,
         cancelledAt: Date? = nil,
         failedAt: Date? = nil,

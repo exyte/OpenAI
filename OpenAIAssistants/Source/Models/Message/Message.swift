@@ -14,7 +14,7 @@ public struct Message: Codable {
     public let createdAt: Date
     public let threadId: String
     public let role: MessageRole
-    public let content: MessageContent
+    public let content: [MessageContent]
     public let assistantId: String?
     public let runId: String?
     public let fileIds: [String]?
@@ -26,7 +26,7 @@ public struct Message: Codable {
         createdAt: Date,
         threadId: String,
         role: MessageRole,
-        content: MessageContent,
+        content: [MessageContent],
         assistantId: String? = nil,
         runId: String? = nil,
         fileIds: [String]? = nil,

@@ -11,16 +11,16 @@ public struct ObjectList<T: Codable>: Codable {
 
     public let object: String
     public let data: [T]
-    public let firstId: String
-    public let lastId: String
-    public let hasMore: Bool
+    public let firstId: String?
+    public let lastId: String?
+    public let hasMore: Bool?
     
     public init(
         object: String,
         data: [T],
-        firstId: String,
-        lastId: String,
-        hasMore: Bool
+        firstId: String?,
+        lastId: String?,
+        hasMore: Bool?
     ) {
         self.object = object
         self.data = data
