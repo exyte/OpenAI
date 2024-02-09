@@ -10,5 +10,6 @@ import Foundation
 public enum MessageRole: String, Codable {
 
     case user
+    case assistant
 
 }
