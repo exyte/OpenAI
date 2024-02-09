@@ -16,6 +16,7 @@ public final class OpenAI {
 
     lazy var defaultDecoder: JSONDecoder = {
         $0.dateDecodingStrategy = .secondsSince1970
+        $0.keyDecodingStrategy = .convertFromSnakeCase
         return $0
     }(JSONDecoder())
 
