@@ -9,7 +9,7 @@ import Foundation
 
 public struct CreateThreadAndRunPayload: Codable {
 
-    public let assistandId: String
+    public let assistantId: String
     public let thread: CreateThreadPayload
     public let model: ModelType?
     public let instructions: String?
@@ -17,14 +17,14 @@ public struct CreateThreadAndRunPayload: Codable {
     public let metadata: [String: String]?
     
     public init(
-        assistandId: String,
+        assistantId: String,
         thread: CreateThreadPayload,
         model: ModelType? = nil,
         instructions: String? = nil,
         tools: [Tool]? = nil,
         metadata: [String : String]? = nil
     ) {
-        self.assistandId = assistandId
+        self.assistantId = assistantId
         self.thread = thread
         self.model = model
         self.instructions = instructions
