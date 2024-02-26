@@ -35,7 +35,7 @@ public extension OpenAI {
     }
 
     func deleteThread(id: String) -> AnyPublisher<DeletionStatus, MoyaError> {
-        modelsProvider.requestPublisher(.deleteModel(modelId: id))
+        threadsProvider.requestPublisher(.deleteThread(threadId: id))
             .map(DeletionStatus.self, using: defaultDecoder)
             .eraseToAnyPublisher()
     }
