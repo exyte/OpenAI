@@ -16,7 +16,6 @@ enum Messages {
     case retrieveMessageFile(threadId: String, messageId: String, fileId: String)
     case modifyMessage(threadId: String, messageId: String, payload: ModifyPayload)
     case listMessageFiles(threadId: String, messageId: String, payload: ListPayload)
-
 }
 
 extension Messages: AccessTokenAuthorizable {

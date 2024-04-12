@@ -25,6 +25,7 @@ public final class OpenAI {
     let threadsProvider: MoyaProvider<Threads>
     let messagesProvider: MoyaProvider<Messages>
     let runsProvider: MoyaProvider<Runs>
+    let filesProvider: MoyaProvider<Files>
 
     public init(apiKey: String, organization: String? = nil) {
         self.apiKey = apiKey
@@ -37,6 +38,7 @@ public final class OpenAI {
         threadsProvider = MoyaProvider<Threads>(plugins: [accessTokenPlugin])
         messagesProvider = MoyaProvider<Messages>(plugins: [accessTokenPlugin])
         runsProvider = MoyaProvider<Runs>(plugins: [accessTokenPlugin])
+        filesProvider = MoyaProvider<Files>(plugins: [accessTokenPlugin])
     }
 
 }
