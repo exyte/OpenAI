@@ -28,7 +28,7 @@ public struct File: Codable {
 
     public let id: String
     public let bytes: Int
-    public let createdAt: Date
+    public let createdAt: Int
     public let filename: String
     public let object: String
     public let purpose: FilePurpose
@@ -36,7 +36,7 @@ public struct File: Codable {
     public init(
         id: String,
         bytes: Int,
-        createdAt: Date,
+        createdAt: Int,
         filename: String,
         object: String,
         purpose: FilePurpose
@@ -47,6 +47,11 @@ public struct File: Codable {
         self.filename = filename
         self.object = object
         self.purpose = purpose
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case id, bytes, filename, object, purpose
+        case createdAt = "created_at"
     }
 
 }
