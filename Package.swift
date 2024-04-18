@@ -7,6 +7,9 @@ let package = Package(
     name: "openai-assistants-api",
     platforms: [
         .iOS(.v16),
+        .tvOS(.v16),
+        .macOS(.v13),
+        .watchOS(.v8)
     ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
@@ -15,7 +18,7 @@ let package = Package(
             targets: ["openai-assistants-api"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/Moya/Moya.git", from: "15.0.0")
+        .package(url: "https://github.com/Moya/Moya.git", .upToNextMajor(from: "15.0.0"))
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
