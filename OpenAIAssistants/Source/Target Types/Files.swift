@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  Files.swift
 //
 //
 //  Created by vadim.vitkovskiy on 12.04.2024.

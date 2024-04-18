@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  OpenAI+Files.swift
 //
 //
 //  Created by vadim.vitkovskiy on 12.04.2024.
@@ -13,25 +13,25 @@ public extension OpenAI {
 
     func uploadFile(payload: FilePayload) -> AnyPublisher<File, MoyaError> {
         filesProvider.requestPublisher(.uploadFile(payload: payload))
-            .map(File.self)
+            .map(File.self, using: defaultDecoder)
             .eraseToAnyPublisher()
     }
 
     func listFiles() -> AnyPublisher<ListFiles, MoyaError> {
         filesProvider.requestPublisher(.listFiles)
-            .map(ListFiles.self)
+            .map(ListFiles.self, using: defaultDecoder)
             .eraseToAnyPublisher()
     }
 
     func retrieveFile(id: String) -> AnyPublisher<File, MoyaError> {
         filesProvider.requestPublisher(.retrieveFile(id: id))
-            .map(File.self)
+            .map(File.self, using: defaultDecoder)
             .eraseToAnyPublisher()
     }
 
     func deleteFile(id: String) -> AnyPublisher<DeletedFile, MoyaError> {
         filesProvider.requestPublisher(.deleteFile(id: id))
-            .map(DeletedFile.self)
+            .map(DeletedFile.self, using: defaultDecoder)
             .eraseToAnyPublisher()
     }
 
