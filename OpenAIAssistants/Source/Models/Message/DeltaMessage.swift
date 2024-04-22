@@ -1,5 +1,5 @@
 //
-//  Message.swift
+//  DeltaMessage.swift
 //
 //  Copyright (c) 2024 Exyte
 //
@@ -24,40 +24,22 @@
 
 import Foundation
 
-public struct Message: Codable {
+public struct DeltaMessage: Codable {
+    public let id, object: String
+    public let delta: Delta
+}
 
-    public var id: String
-    public var object: String
-    public let createdAt: Date
-    public var threadId: String
-    public var role: MessageRole
-    public var content: [MessageContent]
-    public let assistantId: String?
-    public let runId: String?
-    public let fileIds: [String]?
-    public let metadata: [String: String]?
-    
-    public init(
-        id: String,
-        object: String,
-        createdAt: Date,
-        threadId: String,
-        role: MessageRole,
-        content: [MessageContent],
-        assistantId: String? = nil,
-        runId: String? = nil,
-        fileIds: [String]? = nil,
-        metadata: [String : String]? = nil) {
-        self.id = id
-        self.object = object
-        self.createdAt = createdAt
-        self.threadId = threadId
-        self.role = role
-        self.content = content
-        self.assistantId = assistantId
-        self.runId = runId
-        self.fileIds = fileIds
-        self.metadata = metadata
-    }
+public struct Delta: Codable {
+    public let content: [Content]
+}
 
+public struct Content: Codable {
+    public let index: Int
+    public let type: String
+    public let text: TextModel
+}
+
+public struct TextModel: Codable {
+    public var value: String
+    public let annotations: [String]?
 }

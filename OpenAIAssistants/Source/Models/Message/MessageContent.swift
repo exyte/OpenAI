@@ -28,7 +28,7 @@ public struct MessageContent: Codable {
 
     public let type: MessageContentType
     public let imageFile: MessageImageContent?
-    public let text: MessageTextContent?
+    public var text: MessageTextContent?
     
     public init(
         type: MessageContentType,

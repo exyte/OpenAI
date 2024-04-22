@@ -26,7 +26,7 @@ import Foundation
 
 public struct MessageTextContent: Codable {
 
-    public let value: String
+    public var value: String
     
     public init(value: String) {
         self.value = value

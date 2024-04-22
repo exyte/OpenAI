@@ -39,6 +39,48 @@ public extension OpenAI {
             .eraseToAnyPublisher()
     }
 
+    func createStreamRun(in threadId: String, payload: CreateRunPayload) -> PassthroughSubject<Message, Never> {
+            let subject = PassthroughSubject<Message, Never>()
+            let url = URL(string: "https://api.openai.com/v1/threads/\(threadId)/runs")!
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue("assistants=v1", forHTTPHeaderField: "OpenAI-Beta")
+
+            let parameters: [String: Any] = [
+                "assistant_id": payload.assistantId,
+                "stream": true
+            ]
+
+            do {
+                request.httpBody = try JSONSerialization.data(withJSONObject: parameters)
+            } catch {
+                print("Error serializing JSON: \(error)")
+            }
+
+            let src = EventSource(urlRequest: request)
+
+            var message = Message(id: "", object: "", createdAt: Date(), threadId: threadId, role: .assistant, content: [MessageContent(type: .text, text: MessageTextContent(value: ""))])
+            
+            src.onMessage { id, event, data in
+                guard let data, data != "[DONE]" else { return }
+
+                do {
+                    let decoded = try JSONDecoder().decode(DeltaMessage.self, from: Data(data.utf8))
+                    message.id = decoded.id
+                    message.object = decoded.object
+                    message.content[0].text?.value += decoded.delta.content.first?.text.value ?? ""
+                    subject.send(message)
+                } catch {
+                    print("Chat completion error: \(error)")
+                }
+            }
+
+            src.connect()
+            return subject
+        }
+
     func createThreadAndRun(from payload: CreateThreadAndRunPayload) -> AnyPublisher<Run, MoyaError> {
         runsProvider.requestPublisher(.createThreadAndRun(payload: payload))
             .map(Run.self, using: defaultDecoder)
