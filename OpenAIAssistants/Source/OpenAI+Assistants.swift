@@ -25,7 +25,6 @@
 import Foundation
 import Combine
 import Moya
-import CombineMoya
 
 public extension OpenAI {
 

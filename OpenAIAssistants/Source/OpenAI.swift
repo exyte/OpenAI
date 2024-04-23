@@ -25,6 +25,7 @@
 import Foundation
 import Combine
 import Moya
+import CombineMoya
 
 public final class OpenAI {
 
