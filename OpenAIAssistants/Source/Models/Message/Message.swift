@@ -26,12 +26,12 @@ import Foundation
 
 public struct Message: Codable {
 
-    public var id: String
-    public var object: String
+    public let id: String
+    public let object: String
     public let createdAt: Date
-    public var threadId: String
-    public var role: MessageRole
-    public var content: [MessageContent]
+    public let threadId: String
+    public let role: MessageRole
+    public let content: [MessageContent]
     public let assistantId: String?
     public let runId: String?
     public let fileIds: [String]?

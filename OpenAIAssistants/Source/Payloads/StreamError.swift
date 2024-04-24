@@ -1,5 +1,5 @@
 //
-//  MessageContent.swift
+//  StreamError.swift
 //
 //  Copyright (c) 2024 Exyte
 //
@@ -24,20 +24,9 @@
 
 import Foundation
 
-public struct MessageContent: Codable {
+public enum StreamError: Error {
 
-    public let type: MessageContentType
-    public let imageFile: MessageImageContent?
-    public let text: MessageTextContent?
-    
-    public init(
-        type: MessageContentType,
-        imageFile: MessageImageContent? = nil,
-        text: MessageTextContent? = nil
-    ) {
-        self.type = type
-        self.imageFile = imageFile
-        self.text = text
-    }
+    case invalidJSON
+    case custom(Error)
 
 }
