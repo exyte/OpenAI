@@ -47,7 +47,7 @@ extension Messages: AccessTokenAuthorizable {
 extension Messages: TargetType {
 
     var baseURL: URL {
-        URL(string: "https://api.openai.com/v1")!
+        OpenAI.baseURL
     }
 
     var path: String {
@@ -96,7 +96,7 @@ extension Messages: TargetType {
 
     var headers: [String: String]? {
         [
-            "OpenAI-Beta": "assistants=v1"
+            "OpenAI-Beta": "assistants=v2"
         ]
     }
 

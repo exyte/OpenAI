@@ -28,19 +28,34 @@ public struct CreateMessagePayload: Codable {
 
     public let role: MessageRole
     public let content: String
-    public let fileIds: [String]?
     public let metadata: [String: String]?
-    
+    public let attachments: [Attachment]?
+
     public init(
         role: MessageRole,
         content: String,
-        fileIds: [String]? = nil,
-        metadata: [String : String]? = nil
+        metadata: [String : String]? = nil,
+        attachments: [Attachment]? = nil
     ) {
         self.role = role
         self.content = content
-        self.fileIds = fileIds
         self.metadata = metadata
+        self.attachments = attachments
+    }
+
+}
+
+public struct Attachment: Codable {
+
+    public let fileID: String?
+    public let tools: [Tool]?
+
+    public init(
+        fileID: String? = nil,
+        tools: [Tool]? = nil
+    ) {
+        self.fileID = fileID
+        self.tools = tools
     }
 
 }

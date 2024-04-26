@@ -30,12 +30,23 @@ public struct Thread: Codable {
     public let object: String
     public let createdAt: Date
     public let metadata: [String: String]
-    
-    public init(id: String, object: String, createdAt: Date, metadata: [String : String]) {
+    public let toolResources: ToolResources
+    public let tools: [Tool]?
+
+    public init(
+        id: String,
+        object: String,
+        createdAt: Date,
+        metadata: [String : String],
+        toolResources: ToolResources,
+        tools: [Tool]? = nil
+    ) {
         self.id = id
         self.object = object
         self.createdAt = createdAt
         self.metadata = metadata
+        self.toolResources = toolResources
+        self.tools = tools
     }
 
 }

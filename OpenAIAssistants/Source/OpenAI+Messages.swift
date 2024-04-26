@@ -68,28 +68,4 @@ public extension OpenAI {
             .eraseToAnyPublisher()
     }
 
-    func listMessageFiles(from messageId: String, in threadId: String, payload: ListPayload) -> AnyPublisher<ObjectList<MessageFile>, MoyaError> {
-        messagesProvider.requestPublisher(
-            .listMessageFiles(
-                threadId: threadId,
-                messageId: messageId,
-                payload: payload
-            )
-        )
-            .map(ObjectList<MessageFile>.self, using: defaultDecoder)
-            .eraseToAnyPublisher()
-    }
-
-    func retrieveMessageFile(id: String, from messageId: String, in threadId: String) -> AnyPublisher<MessageFile, MoyaError> {
-        messagesProvider.requestPublisher(
-            .retrieveMessageFile(
-                threadId: threadId,
-                messageId: messageId,
-                fileId: id
-            )
-        )
-            .map(MessageFile.self, using: defaultDecoder)
-            .eraseToAnyPublisher()
-    }
-
 }

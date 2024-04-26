@@ -63,17 +63,6 @@ public extension OpenAI {
             .eraseToAnyPublisher()
     }
 
-    func createAssistantFile(for assistantId: String, payload: CreateAssistantFilePayload) -> AnyPublisher<AssistantFile, MoyaError> {
-        assistantsProvider.requestPublisher(
-            .createAssistantFile(
-                assistantId: assistantId,
-                payload: payload
-            )
-        )
-            .map(AssistantFile.self, using: defaultDecoder)
-            .eraseToAnyPublisher()
-    }
-
     func deleteAssistantFile(id: String, from assistantId: String) -> AnyPublisher<DeletionStatus, MoyaError> {
         assistantsProvider.requestPublisher(
             .deleteAssistantFile(
@@ -82,28 +71,6 @@ public extension OpenAI {
             )
         )
             .map(DeletionStatus.self, using: defaultDecoder)
-            .eraseToAnyPublisher()
-    }
-
-    func listAssistantFiles(from assistantId: String, payload: ListPayload) -> AnyPublisher<ObjectList<AssistantFile>, MoyaError> {
-        assistantsProvider.requestPublisher(
-            .listAssistantFiles(
-                assistantId: assistantId,
-                payload: payload
-            )
-        )
-            .map(ObjectList<AssistantFile>.self, using: defaultDecoder)
-            .eraseToAnyPublisher()
-    }
-
-    func retrieveAssistantFile(id: String, from assistantId: String) -> AnyPublisher<AssistantFile, MoyaError> {
-        assistantsProvider.requestPublisher(
-            .retrieveAssistantFile(
-                assistantId: assistantId,
-                fileId: id
-            )
-        )
-            .map(AssistantFile.self, using: defaultDecoder)
             .eraseToAnyPublisher()
     }
 

@@ -38,6 +38,10 @@ public final class OpenAI {
         return $0
     }(JSONDecoder())
 
+    static var baseURL: URL {
+        URL(string: "https://api.openai.com/v1")!
+    }
+
     let modelsProvider: MoyaProvider<Models>
     let assistantsProvider: MoyaProvider<Assistans>
     let threadsProvider: MoyaProvider<Threads>
