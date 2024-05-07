@@ -27,9 +27,14 @@ import Foundation
 public struct MessageTextContent: Codable {
 
     public let value: String
-    
-    public init(value: String) {
+    public let annotations: [Annotations]?
+
+    public init(
+        value: String,
+        annotations: [Annotations]? = nil
+    ) {
         self.value = value
+        self.annotations = annotations
     }
 
 }

@@ -30,5 +30,12 @@ public enum ModelType: String, Codable {
     case gpt3_5_turbo = "gpt-3.5-turbo"
     case gpt4 = "gpt-4"
     case gpt4_5_turbo = "gpt-4-turbo-preview"
+    case unknown = "unknown"
+
+    public init(from decoder: Decoder) {
+        let container = try? decoder.singleValueContainer()
+        let rawValue = try? container?.decode(String.self)
+        self = ModelType(rawValue: rawValue ?? "") ?? .unknown
+    }
 
 }

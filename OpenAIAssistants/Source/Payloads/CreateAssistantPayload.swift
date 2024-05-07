@@ -31,7 +31,6 @@ public struct CreateAssistantPayload: Codable {
     public let description: String?
     public let instructions: String?
     public let tools: [Tool]?
-    public let fileIds: [String]?
     public let metadata: [String: String]?
     
     public init(
@@ -40,7 +39,6 @@ public struct CreateAssistantPayload: Codable {
         description: String? = nil,
         instructions: String? = nil,
         tools: [Tool]? = nil,
-        fileIds: [String]? = nil,
         metadata: [String : String]? = nil
     ) {
         self.model = model
@@ -48,7 +46,6 @@ public struct CreateAssistantPayload: Codable {
         self.description = description
         self.instructions = instructions
         self.tools = tools
-        self.fileIds = fileIds
         self.metadata = metadata
     }
     

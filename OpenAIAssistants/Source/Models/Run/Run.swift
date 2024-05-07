@@ -42,7 +42,6 @@ public struct Run: Codable {
     public let model: ModelType
     public let instructions: String
     public let tools: [Tool]
-    public let fileIds: [String]
     public let metadata: [String: String]?
     public let usage: UsageStatistics?
     
@@ -63,7 +62,6 @@ public struct Run: Codable {
         model: ModelType,
         instructions: String,
         tools: [Tool],
-        fileIds: [String],
         metadata: [String : String]? = nil,
         usage: UsageStatistics? = nil
     ) {
@@ -83,7 +81,6 @@ public struct Run: Codable {
         self.model = model
         self.instructions = instructions
         self.tools = tools
-        self.fileIds = fileIds
         self.metadata = metadata
         self.usage = usage
     }

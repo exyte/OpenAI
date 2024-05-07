@@ -27,7 +27,7 @@ import Foundation
 public struct CreateRunPayload: Codable {
 
     public let assistantId: String
-    public let model: String?
+    public let model: ModelType?
     public let instructions: String?
     public let additionalInstructions: String?
     public let tools: [Tool]?
@@ -35,7 +35,7 @@ public struct CreateRunPayload: Codable {
     
     public init(
         assistantId: String,
-        model: String? = nil,
+        model: ModelType? = nil,
         instructions: String? = nil,
         additionalInstructions: String? = nil,
         tools: [Tool]? = nil,

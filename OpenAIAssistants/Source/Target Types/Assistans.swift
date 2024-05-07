@@ -50,7 +50,7 @@ extension Assistans: AccessTokenAuthorizable {
 extension Assistans: TargetType {
 
     var baseURL: URL {
-        URL(string: "https://api.openai.com/v1")!
+        OpenAI.baseURL
     }
 
     var path: String {
@@ -103,7 +103,7 @@ extension Assistans: TargetType {
 
     var headers: [String: String]? {
         [
-            "OpenAI-Beta": "assistants=v1"
+            "OpenAI-Beta": "assistants=v2"
         ]
     }
 

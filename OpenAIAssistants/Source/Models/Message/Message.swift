@@ -24,40 +24,116 @@
 
 import Foundation
 
+public enum MessageStatus: String, Codable {
+
+    case inProgress = "in_progress"
+    case inComplete = "incomplete"
+    case completed = "completed"
+
+}
+
 public struct Message: Codable {
 
     public let id: String
     public let object: String
     public let createdAt: Date
     public let threadId: String
+    public let status: MessageStatus?
+    public let incompleteDetails: IncompleteDetails?
+    public let completedAt: Int?
+    public let incompleteAt: Int?
     public let role: MessageRole
     public let content: [MessageContent]
     public let assistantId: String?
     public let runId: String?
-    public let fileIds: [String]?
     public let metadata: [String: String]?
-    
+    public let attachments: [Attachment]?
+
     public init(
         id: String,
         object: String,
         createdAt: Date,
         threadId: String,
+        status: MessageStatus? = nil,
+        incompleteDetails: IncompleteDetails? = nil,
+        completedAt: Int? = nil,
+        incompleteAt: Int? = nil,
         role: MessageRole,
         content: [MessageContent],
         assistantId: String? = nil,
         runId: String? = nil,
-        fileIds: [String]? = nil,
-        metadata: [String : String]? = nil) {
+        metadata: [String : String]? = nil,
+        attachments: [Attachment]? = nil
+    ) {
         self.id = id
         self.object = object
         self.createdAt = createdAt
         self.threadId = threadId
+        self.status = status
+        self.incompleteDetails = incompleteDetails
+        self.completedAt = completedAt
+        self.incompleteAt = incompleteAt
         self.role = role
         self.content = content
         self.assistantId = assistantId
         self.runId = runId
-        self.fileIds = fileIds
         self.metadata = metadata
+        self.attachments = attachments
+    }
+
+}
+
+public struct IncompleteDetails: Codable {
+
+    public let reason: String
+
+    public init(reason: String) {
+        self.reason = reason
+    }
+
+}
+
+public struct Annotations: Codable {
+
+    public let type: String
+    public let text: String
+    public let startIndex: Int
+    public let endIndex: Int
+    public let fileCitation: Citation?
+    public let filePath: Citation?
+
+    public init(
+        type: String,
+        text: String,
+        startIndex: Int,
+        endIndex: Int,
+        fileCitation: Citation? = nil,
+        filePath: Citation? = nil
+    ) {
+        self.type = type
+        self.text = text
+        self.startIndex = startIndex
+        self.endIndex = endIndex
+        self.fileCitation = fileCitation
+        self.filePath = filePath
+    }
+
+}
+
+public struct Citation: Codable {
+
+    public let fileId: String?
+    public let filePath: String?
+    public let quote: String?
+
+    public init(
+        fileId: String? = nil,
+        filePath: String? = nil,
+        quote: String? = nil
+    ) {
+        self.fileId = fileId
+        self.filePath = filePath
+        self.quote = quote
     }
 
 }

@@ -1,5 +1,5 @@
 //
-//  Threads.swift
+//  Files.swift
 //
 //  Copyright (c) 2024 Exyte
 //
@@ -25,24 +25,22 @@
 import Foundation
 import Moya
 
-enum Threads {
-
-    case createThread(payload: CreateThreadPayload)
-    case retrieveThread(threadId: String)
-    case modifyThread(threadId: String, payload: ModifyPayload)
-    case deleteThread(threadId: String)
-
+enum Files {
+    case uploadFile(payload: FilePayload)
+    case listFiles
+    case retrieveFile(id: String)
+    case deleteFile(id: String)
+    case retrieveFileContent(id: String)
 }
 
-extension Threads: AccessTokenAuthorizable {
+extension Files: AccessTokenAuthorizable {
 
     var authorizationType: Moya.AuthorizationType? {
         .bearer
     }
-
 }
 
-extension Threads: TargetType {
+extension Files: TargetType {
 
     var baseURL: URL {
         OpenAI.baseURL
@@ -50,20 +48,22 @@ extension Threads: TargetType {
 
     var path: String {
         switch self {
-        case .createThread:
-            return "/threads"
-        case .retrieveThread(let threadId), .modifyThread(let threadId, _), .deleteThread(let threadId):
-            return "/threads/\(threadId)"
+        case .uploadFile, .listFiles:
+            return "files"
+        case .retrieveFile(let id), .deleteFile(let id):
+            return "files/\(id)"
+        case .retrieveFileContent(let id):
+            return "files/\(id)/content"
         }
     }
 
     var method: Moya.Method {
         switch self {
-        case .createThread, .modifyThread:
+        case .uploadFile:
             return .post
-        case .retrieveThread:
+        case .listFiles, .retrieveFile, .retrieveFileContent:
             return .get
-        case .deleteThread:
+        case .deleteFile:
             return .delete
         }
     }
@@ -72,14 +72,25 @@ extension Threads: TargetType {
         let encoder = JSONEncoder()
         encoder.keyEncodingStrategy = .convertToSnakeCase
         switch self {
-        case .createThread(let payload):
-            return .requestCustomJSONEncodable(payload, encoder: encoder)
-        case .retrieveThread:
+        case .uploadFile(let payload):
+            let formData: [MultipartFormData] = [
+                MultipartFormData(provider: .file(payload.fileURL), name: "file", fileName: payload.fileURL.lastPathComponent),
+                MultipartFormData(provider: .data(payload.purpose.data(using: .utf8)!), name: "purpose")
+            ]
+            return .uploadMultipart(formData)
+
+        case .listFiles, .retrieveFile, .deleteFile:
             return .requestPlain
-        case .modifyThread(_, let payload):
-            return .requestCustomJSONEncodable(payload, encoder: encoder)
-        case .deleteThread:
-            return .requestPlain
+        case .retrieveFileContent:
+
+            let defaultDownloadDestination: DownloadDestination = { temporaryURL, response in
+
+                let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                let fileURL = documentsURL.appendingPathComponent(response.suggestedFilename!)
+                return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
+            }
+
+            return .downloadDestination(defaultDownloadDestination)
         }
     }
 

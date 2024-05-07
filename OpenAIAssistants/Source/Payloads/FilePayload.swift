@@ -1,5 +1,5 @@
 //
-//  AssistantFile.swift
+//  FilePayload.swift
 //
 //  Copyright (c) 2024 Exyte
 //
@@ -24,18 +24,16 @@
 
 import Foundation
 
-public struct AssistantFile: Codable {
+public struct FilePayload: Codable {
 
-    public let id: String
-    public let object: String
-    public let createdAt: Date
-    public let assistantId: String
-    
-    public init(id: String, object: String, createdAt: Date, assistantId: String) {
-        self.id = id
-        self.object = object
-        self.createdAt = createdAt
-        self.assistantId = assistantId
+    public let purpose: String
+    public let fileURL: URL
+
+    public init(
+        purpose: FilePurpose,
+        fileURL: URL
+    ) {
+        self.purpose = purpose.rawValue
+        self.fileURL = fileURL
     }
-
 }

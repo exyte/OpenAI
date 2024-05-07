@@ -38,11 +38,16 @@ public final class OpenAI {
         return $0
     }(JSONDecoder())
 
+    static var baseURL: URL {
+        URL(string: "https://api.openai.com/v1")!
+    }
+
     let modelsProvider: MoyaProvider<Models>
     let assistantsProvider: MoyaProvider<Assistans>
     let threadsProvider: MoyaProvider<Threads>
     let messagesProvider: MoyaProvider<Messages>
     let runsProvider: MoyaProvider<Runs>
+    let filesProvider: MoyaProvider<Files>
 
     public init(apiKey: String, organization: String? = nil) {
         self.apiKey = apiKey
@@ -55,6 +60,7 @@ public final class OpenAI {
         threadsProvider = MoyaProvider<Threads>(plugins: [accessTokenPlugin])
         messagesProvider = MoyaProvider<Messages>(plugins: [accessTokenPlugin])
         runsProvider = MoyaProvider<Runs>(plugins: [accessTokenPlugin])
+        filesProvider = MoyaProvider<Files>(plugins: [accessTokenPlugin])
     }
 
 }

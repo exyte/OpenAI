@@ -31,23 +31,23 @@ public struct Assistant: Codable {
     public let createdAt: Date
     public let name: String?
     public let description: String?
-    public let model: String
+    public let model: ModelType
     public let instructions: String?
-    public let tools: [Tool]
-    public let fileIds: [String]
+    public let tools: [Tool]?
     public let metadata: [String: String]
-    
+    public let toolResources: ToolResources
+
     public init(
         id: String,
         object: String,
         createdAt: Date,
         name: String? = nil,
         description: String? = nil,
-        model: String,
+        model: ModelType,
         instructions: String? = nil,
-        tools: [Tool],
-        fileIds: [String],
-        metadata: [String : String]
+        tools: [Tool]? = nil,
+        metadata: [String : String],
+        toolResources: ToolResources
     ) {
         self.id = id
         self.object = object
@@ -57,8 +57,43 @@ public struct Assistant: Codable {
         self.model = model
         self.instructions = instructions
         self.tools = tools
-        self.fileIds = fileIds
         self.metadata = metadata
+        self.toolResources = toolResources
+    }
+
+}
+
+public struct ToolResources: Codable {
+
+    public let fileSearch: FileSearch?
+    public let codeInterpreter: CodeInterpreter?
+
+    public init(
+        fileSearch: FileSearch? = nil,
+        codeInterpreter: CodeInterpreter? = nil
+    ) {
+        self.fileSearch = fileSearch
+        self.codeInterpreter = codeInterpreter
+    }
+
+}
+
+public struct CodeInterpreter: Codable {
+
+    public let fileIDS: [String]
+
+    public init(fileIDS: [String]) {
+        self.fileIDS = fileIDS
+    }
+
+}
+
+public struct FileSearch: Codable {
+
+    public let vectorStoreIDS: [String]
+
+    public init(vectorStoreIDS: [String]) {
+        self.vectorStoreIDS = vectorStoreIDS
     }
 
 }
