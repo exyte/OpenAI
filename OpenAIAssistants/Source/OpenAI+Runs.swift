@@ -25,6 +25,7 @@
 import Foundation
 import Combine
 import Moya
+import EventSource
 
 public extension OpenAI {
 
@@ -37,6 +38,59 @@ public extension OpenAI {
         )
             .map(Run.self, using: defaultDecoder)
             .eraseToAnyPublisher()
+    }
+
+    func createStreamRun(in threadId: String, payload: CreateRunPayload) -> AnyPublisher<Message, StreamError> {
+        let subject = PassthroughSubject<Message, StreamError>()
+        guard let url = URL(string: "https://api.openai.com/v1/threads/\(threadId)/runs") else { 
+            subject.send(completion: .failure(.invalidURL))
+            return subject.eraseToAnyPublisher()
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("assistants=v1", forHTTPHeaderField: "OpenAI-Beta")
+
+        let parameters: [String: Any] = [
+            "assistant_id": payload.assistantId,
+            "stream": true
+        ]
+
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: parameters)
+        } catch {
+            subject.send(completion: .failure(.invalidJSON))
+        }
+
+        let src = EventSource(urlRequest: request)
+        var messageText = ""
+
+        src.onMessage { id, event, data in
+            guard let data, data != "[DONE]" else { return }
+
+            do {
+                let decoded = try JSONDecoder().decode(DeltaMessage.self, from: Data(data.utf8))
+                messageText += decoded.delta.content.first?.text.value ?? ""
+                let message = Message(id: "",
+                                      object: "",
+                                      createdAt: Date(),
+                                      threadId: threadId,
+                                      role: .assistant,
+                                      content: [MessageContent(type: .text, text: MessageTextContent(value: messageText))])
+                subject.send(message)
+            } catch {
+                subject.send(completion: .failure(.custom(error)))
+            }
+        }
+
+        src.connect()
+        return subject.handleEvents(
+            receiveCancel: {
+                src.disconnect()
+            }
+        ).eraseToAnyPublisher()
     }
 
     func createThreadAndRun(from payload: CreateThreadAndRunPayload) -> AnyPublisher<Run, MoyaError> {
