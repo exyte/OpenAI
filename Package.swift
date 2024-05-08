@@ -18,7 +18,8 @@ let package = Package(
             targets: ["openai-assistants-api"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/Moya/Moya.git", .upToNextMajor(from: "15.0.0"))
+        .package(url: "https://github.com/Moya/Moya.git", .upToNextMajor(from: "15.0.0")),
+        .package(url: "https://github.com/exyte/EventSource", branch: "master")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -26,7 +27,8 @@ let package = Package(
         .target(
             name: "openai-assistants-api",
             dependencies: [
-                .product(name: "CombineMoya", package: "Moya")],
+                .product(name: "CombineMoya", package: "Moya"),
+                .product(name: "EventSource", package: "EventSource")],
             path: "OpenAIAssistants/Source")
     ]
 )
