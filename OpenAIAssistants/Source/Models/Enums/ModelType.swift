@@ -30,6 +30,7 @@ public enum ModelType: String, Codable {
     case gpt3_5_turbo = "gpt-3.5-turbo"
     case gpt4 = "gpt-4"
     case gpt4_5_turbo = "gpt-4-turbo-preview"
+    case gpt4_o = "gpt-4o"
     case unknown = "unknown"
 
     public init(from decoder: Decoder) {
