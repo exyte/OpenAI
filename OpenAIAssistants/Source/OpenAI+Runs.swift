@@ -25,7 +25,7 @@
 import Foundation
 import Combine
 import Moya
-import EventSource
+import EventSourceHttpBody
 
 public extension OpenAI {
 
