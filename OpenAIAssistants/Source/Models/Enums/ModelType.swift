@@ -26,10 +26,31 @@ import Foundation
 
 public enum ModelType: String, Codable {
 
-    case gpt3_5 = "gpt-3.5"
-    case gpt3_5_turbo = "gpt-3.5-turbo"
-    case gpt4 = "gpt-4"
-    case gpt4_5_turbo = "gpt-4-turbo-preview"
+    // GPT-4
+    case gpt_4o = "gpt-4o"
+    case gpt_4o_2024_05_13 = "gpt-4o-2024-05-13"
+    case gpt_4_turbo = "gpt-4-turbo"
+    case gpt_4_turbo_2024_04_09 = "gpt-4-turbo-2024-04-09"
+    case gpt_4_0125_preview = "gpt-4-0125-preview"
+    case gpt_4_turbo_preview = "gpt-4-turbo-preview"
+    case gpt_4_1106_preview = "gpt-4-1106-preview"
+    case gpt_4_vision_preview = "gpt-4-vision-preview"
+    case gpt_4 = "gpt-4"
+    case gpt_4_0314 = "gpt-4-0314"
+    case gpt_4_0613 = "gpt-4-0613"
+    case gpt_4_32k = "gpt-4-32k"
+    case gpt_4_32k_0314 = "gpt-4-32k-0314"
+    case gpt_4_32k_0613 = "gpt-4-32k-0613"
+    
+    // GPT-3.5
+    case gpt_3_5_turbo = "gpt-3.5-turbo"
+    case gpt_3_5_turbo_16k = "gpt-3.5-turbo-16k"
+    case gpt_3_5_turbo_0301 = "gpt-3.5-turbo-0301"
+    case gpt_3_5_turbo_0613 = "gpt-3.5-turbo-0613"
+    case gpt_3_5_turbo_1106 = "gpt-3.5-turbo-1106"
+    case gpt_3_5_turbo_0125 = "gpt-3.5-turbo-0125"
+    case gpt_3_5_turbo_16k_0613 = "gpt-3.5-turbo-16k-0613"
+    
     case unknown = "unknown"
 
     public init(from decoder: Decoder) {
