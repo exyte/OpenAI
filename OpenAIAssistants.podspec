@@ -32,4 +32,5 @@ TODO: Add long description of the pod here.
   s.source_files = 'OpenAIAssistants/Source/**/*'
 
   s.dependency 'Moya/Combine', '~> 15.0'
+  s.dependency 'EventSourceHttpBody', '~> 0.1.0'
 end

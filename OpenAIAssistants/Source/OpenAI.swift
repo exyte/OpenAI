@@ -25,7 +25,9 @@
 import Foundation
 import Combine
 import Moya
+#if canImport(CombineMoya)
 import CombineMoya
+#endif
 
 public final class OpenAI {
 
