@@ -55,8 +55,13 @@ public enum ModelType: String, Codable {
 
     public init(from decoder: Decoder) {
         let container = try? decoder.singleValueContainer()
-        let rawValue = try? container?.decode(String.self)
-        self = ModelType(rawValue: rawValue ?? "") ?? .unknown
+
+        do {
+            let rawValue = try container?.decode(String.self) ?? ""
+            self = ModelType(rawValue: rawValue) ?? .unknown
+        } catch {
+            self = .unknown
+        }
     }
 
 }
