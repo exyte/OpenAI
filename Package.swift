@@ -18,8 +18,8 @@ let package = Package(
             targets: ["OpenAIAssistants"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/Moya/Moya.git", .upToNextMajor(from: "15.0.0")),
-        .package(url: "https://github.com/exyte/EventSourceHttpBody.git", branch: "main")
+        .package(url: "https://github.com/Moya/Moya.git", .upToNextMajor(from: "15.0.")),
+        .package(url: "https://github.com/exyte/EventSourceHttpBody.git", .upToNextMajor(from: "0.1.0"))
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
