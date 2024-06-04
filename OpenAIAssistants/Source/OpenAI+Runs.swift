@@ -51,7 +51,7 @@ public extension OpenAI {
         request.httpMethod = "POST"
         request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("assistants=v1", forHTTPHeaderField: "OpenAI-Beta")
+        request.setValue("assistants=v2", forHTTPHeaderField: "OpenAI-Beta")
 
         let parameters: [String: Any] = [
             "assistant_id": payload.assistantId,
