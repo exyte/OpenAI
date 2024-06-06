@@ -67,6 +67,16 @@ public extension OpenAI {
         let src = EventSource(urlRequest: request)
         var messageText = ""
 
+        src.onComplete { _, _, _ in
+            let endMessage = Message(id: "",
+                                  object: "",
+                                  createdAt: Date(),
+                                  threadId: threadId,
+                                  role: .assistant,
+                                  content: [MessageContent(type: .text, text: MessageTextContent(value: "DONE"))])
+            subject.send(endMessage)
+        }
+
         src.onMessage { id, event, data in
             guard let data, data != "[DONE]" else { return }
 
