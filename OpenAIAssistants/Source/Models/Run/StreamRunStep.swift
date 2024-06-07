@@ -1,5 +1,5 @@
 //
-//  DeltaMessage.swift
+//  StreamThreadRunStep.swift
 //
 //  Copyright (c) 2024 Exyte
 //
@@ -24,24 +24,18 @@
 
 import Foundation
 
-public struct DeltaMessage: Codable {
+public struct StreamThreadRunStep: Codable {
+
     public let id: String
-    public let object: String
-    public let delta: Delta?
-    public let status: RunStatus?
-}
+    public let createdAt: Date
+    public let expiresAt: Date
+    public let assistantID: String?
+    public let type: String?
+    public let lastError: Date?
+    public let cancelledAt: Date?
+    public let object: String?
+    public let failedAt: Date?
+    public let completedAt: Date?
+    public let status: String?
 
-public struct Delta: Codable {
-    public let content: [Content]
-}
-
-public struct Content: Codable {
-    public let index: Int
-    public let type: String
-    public let text: TextModel
-}
-
-public struct TextModel: Codable {
-    public var value: String
-    public let annotations: [String]?
 }

@@ -40,9 +40,9 @@ public extension OpenAI {
             .eraseToAnyPublisher()
     }
 
-    func createStreamRun(in threadId: String, payload: CreateRunPayload) -> AnyPublisher<Message, StreamError> {
-        let subject = PassthroughSubject<Message, StreamError>()
-        guard let url = URL(string: "https://api.openai.com/v1/threads/\(threadId)/runs") else { 
+    func createStreamRun(in threadId: String, payload: CreateRunPayload) -> AnyPublisher<StreamEvent, StreamError> {
+        let subject = PassthroughSubject<StreamEvent, StreamError>()
+        guard let url = URL(string: "https://api.openai.com/v1/threads/\(threadId)/runs") else {
             subject.send(completion: .failure(.invalidURL))
             return subject.eraseToAnyPublisher()
         }
@@ -68,31 +68,19 @@ public extension OpenAI {
         var messageText = ""
 
         src.onComplete { _, _, _ in
-            let endMessage = Message(id: "",
-                                  object: "",
-                                  createdAt: Date(),
-                                  threadId: threadId,
-                                  role: .assistant,
-                                  content: [MessageContent(type: .text, text: MessageTextContent(value: "DONE"))])
-            subject.send(endMessage)
+
         }
 
-        src.onMessage { id, event, data in
-            guard let data, data != "[DONE]" else { return }
+        src.onMessage { id, event, content in
+            guard let event,
+                  let data = content?.data(using: .utf8) else { return }
 
-            do {
-                let decoded = try JSONDecoder().decode(DeltaMessage.self, from: Data(data.utf8))
-                messageText += decoded.delta.content.first?.text.value ?? ""
-                let message = Message(id: "",
-                                      object: "",
-                                      createdAt: Date(),
-                                      threadId: threadId,
-                                      role: .assistant,
-                                      content: [MessageContent(type: .text, text: MessageTextContent(value: messageText))])
-                subject.send(message)
-            } catch {
-                subject.send(completion: .failure(.custom(error)))
+            guard let streamEvent = StreamEvent(eventName: event, data: data) else {
+                subject.send(completion: .failure(.invalidEvent))
+                return
             }
+
+            subject.send(streamEvent)
         }
 
         src.connect()
