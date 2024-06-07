@@ -34,13 +34,13 @@ public struct RunStep: Codable {
     public let runId: String
     public let type: RunStepType
     public let status: RunStatus
-    public let stepDetails: RunStepDetails
+    public let stepDetails: RunStepDetails?
     public let lastError: RunError?
     public let expiredAt: Date?
     public let cancelledAt: Date?
     public let failedAt: Date?
     public let completedAt: Date?
-    public let metadata: [String: String]
+    public let metadata: [String: String]?
     public let usage: UsageStatistics?
     
     public init(
@@ -58,7 +58,7 @@ public struct RunStep: Codable {
         cancelledAt: Date? = nil,
         failedAt: Date? = nil,
         completedAt: Date? = nil,
-        metadata: [String : String],
+        metadata: [String : String]? = nil,
         usage: UsageStatistics? = nil
     ) {
         self.id = id

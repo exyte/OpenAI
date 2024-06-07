@@ -30,7 +30,7 @@ public extension OpenAI {
 
     func createMessage(in threadId: String, payload: CreateMessagePayload) -> AnyPublisher<Message, MoyaError> {
         messagesProvider.requestPublisher(.createMessage(threadId: threadId, payload: payload))
-            .map(Message.self, using: defaultDecoder)
+            .map(Message.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
@@ -41,7 +41,7 @@ public extension OpenAI {
                 payload: payload
             )
         )
-            .map(ObjectList<Message>.self, using: defaultDecoder)
+            .map(ObjectList<Message>.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
@@ -52,7 +52,7 @@ public extension OpenAI {
                 messageId: id
             )
         )
-            .map(Message.self, using: defaultDecoder)
+            .map(Message.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
@@ -64,7 +64,7 @@ public extension OpenAI {
                 payload: payload
             )
         )
-            .map(Message.self, using: defaultDecoder)
+            .map(Message.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 

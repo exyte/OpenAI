@@ -36,8 +36,8 @@ public extension OpenAI {
                 payload: payload
             )
         )
-            .map(Run.self, using: defaultDecoder)
-            .eraseToAnyPublisher()
+        .map(Run.self, using: OpenAI.defaultDecoder)
+        .eraseToAnyPublisher()
     }
 
     func createStreamRun(in threadId: String, payload: CreateRunPayload) -> AnyPublisher<StreamEvent, StreamError> {
@@ -65,24 +65,20 @@ public extension OpenAI {
         }
 
         let src = EventSource(urlRequest: request)
-        var messageText = ""
-
-        src.onComplete { _, _, _ in
-
-        }
-
         src.onMessage { id, event, content in
             guard let event,
                   let data = content?.data(using: .utf8) else { return }
 
-            guard let streamEvent = StreamEvent(eventName: event, data: data) else {
-                subject.send(completion: .failure(.invalidEvent))
-                return
+            do {
+                if let streamEvent = try StreamEvent(eventName: event, data: data) {
+                    subject.send(streamEvent)
+                }
+            } catch(let error) {
+                if let streamError = error as? StreamError {
+                    subject.send(completion: .failure(streamError))
+                }
             }
-
-            subject.send(streamEvent)
         }
-
         src.connect()
         return subject.handleEvents(
             receiveCancel: {
@@ -93,7 +89,7 @@ public extension OpenAI {
 
     func createThreadAndRun(from payload: CreateThreadAndRunPayload) -> AnyPublisher<Run, MoyaError> {
         runsProvider.requestPublisher(.createThreadAndRun(payload: payload))
-            .map(Run.self, using: defaultDecoder)
+            .map(Run.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
@@ -104,7 +100,7 @@ public extension OpenAI {
                 payload: payload
             )
         )
-            .map(ObjectList<Run>.self, using: defaultDecoder)
+            .map(ObjectList<Run>.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
@@ -115,7 +111,7 @@ public extension OpenAI {
                 runId: id
             )
         )
-            .map(Run.self, using: defaultDecoder)
+            .map(Run.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
@@ -127,7 +123,7 @@ public extension OpenAI {
                 payload: payload
             )
         )
-            .map(Message.self, using: defaultDecoder)
+            .map(Message.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
@@ -138,7 +134,7 @@ public extension OpenAI {
                 runId: id
             )
         )
-            .map(Message.self, using: defaultDecoder)
+            .map(Message.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
@@ -150,7 +146,7 @@ public extension OpenAI {
                 payload: payload
             )
         )
-            .map(Run.self, using: defaultDecoder)
+            .map(Run.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
@@ -162,7 +158,7 @@ public extension OpenAI {
                 payload: payload
             )
         )
-            .map(ObjectList<RunStep>.self, using: defaultDecoder)
+            .map(ObjectList<RunStep>.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
@@ -174,7 +170,7 @@ public extension OpenAI {
                 runStepId: id
             )
         )
-            .map(Run.self, using: defaultDecoder)
+            .map(Run.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 

@@ -30,7 +30,7 @@ public extension OpenAI {
 
     func createAssistant(from payload: CreateAssistantPayload) -> AnyPublisher<Assistant, MoyaError> {
         assistantsProvider.requestPublisher(.createAssistant(payload: payload))
-            .map(Assistant.self, using: defaultDecoder)
+            .map(Assistant.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
@@ -41,25 +41,25 @@ public extension OpenAI {
                 payload: payload
             )
         )
-            .map(Assistant.self, using: defaultDecoder)
+            .map(Assistant.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
     func deleteAssistant(id: String) -> AnyPublisher<DeletionStatus, MoyaError> {
         assistantsProvider.requestPublisher(.deleteAssistant(assistantId: id))
-            .map(DeletionStatus.self, using: defaultDecoder)
+            .map(DeletionStatus.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
     func listAssistants(payload: ListPayload) -> AnyPublisher<ObjectList<Assistant>, MoyaError> {
         assistantsProvider.requestPublisher(.listAssistants(payload: payload))
-            .map(ObjectList<Assistant>.self, using: defaultDecoder)
+            .map(ObjectList<Assistant>.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
     func retrieveAssistant(id: String) -> AnyPublisher<Assistant, MoyaError> {
         assistantsProvider.requestPublisher(.retrieveAssistant(assistantId: id))
-            .map(Assistant.self, using: defaultDecoder)
+            .map(Assistant.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
@@ -70,7 +70,7 @@ public extension OpenAI {
                 fileId: id
             )
         )
-            .map(DeletionStatus.self, using: defaultDecoder)
+            .map(DeletionStatus.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 

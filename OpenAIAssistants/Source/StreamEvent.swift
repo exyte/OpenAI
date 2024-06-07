@@ -24,31 +24,21 @@
 
 import Foundation
 
-public enum StreamEventError: Error {
-    case decodeError
-}
-
-extension Data {
-    var prettyJSON: NSString { /// NSString gives us a nice sanitized debugDescription
-        guard let object = try? JSONSerialization.jsonObject(with: self, options: []),
-              let data = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted]),
-              let prettyPrintedString = NSString(data: data, encoding: String.Encoding.utf8.rawValue) else { return "" }
-
-        return prettyPrintedString
-    }
-}
-
 public enum StreamEvent {
 
+    case unknown
     case threadRunCreated(Run)
     case threadRunQueued(Run)
     case threadRunInProgress(Run)
-    case threadRunStepCreated(StreamThreadRunStep)
-    case threadRunStepInProgress(Run)
+    case threadRunStepCreated(RunStep)
+    case threadRunStepInProgress(RunStep)
     case threadMessageCreated(Message)
+    case threadMessageInProgress(Message)
     case threadMessageDelta(DeltaMessage)
-    case error(StreamEventError)
-    case unknown
+    case threadMessageCompleted(Message)
+    case threadRunStepCompleted(RunStep)
+    case threadRunCompleted(Run)
+    case done
 
     var eventName: String {
         switch self {
@@ -68,59 +58,86 @@ public enum StreamEvent {
             return "unknown"
         case .threadRunStepInProgress:
             return "thread.run.step.in_progress"
-        case .error(let error):
-            return error.localizedDescription
+        case .threadMessageInProgress:
+            return "thread.message.in_progress"
+        case .threadMessageCompleted:
+            return "thread.message.completed"
+        case .threadRunStepCompleted:
+            return "thread.run.step.completed"
+        case .threadRunCompleted:
+            return "thread.run.completed"
+        case .done:
+            return "done"
         }
     }
 
-    public init?(eventName: String, data: Data) {
+    public init?(eventName: String, data: Data) throws {
         self = .unknown
-        
         switch eventName {
         case "thread.run.created",
             "thread.run.queued",
             "thread.run.in_progress",
-            "thread.run.step.in_progress":
+            "thread.run.completed":
             let model: Run? = StreamEvent.decodeData(data)
             guard let model else {
-                self = .error(.decodeError)
-                return
+                throw StreamError.decodeError
             }
 
-            switch eventName {
-            case "thread.run.created":
+            if eventName == "thread.run.created" {
                 self = .threadRunCreated(model)
-            case "thread.run.queued":
-                self = .threadRunQueued(model)
-            case "thread.run.in_progress":
+            } else if eventName == "thread.run.in_progress" {
                 self = .threadRunInProgress(model)
-            case "thread.run.step.in_progress":
-                self = .threadRunStepInProgress(model)
-            default:
-                print("unknown")
+            } else if eventName == "thread.run.queued" {
+                self = .threadRunQueued(model)
+            } else if eventName == "thread.run.completed" {
+                self = .threadRunCompleted(model)
             }
-        case "thread.run.step.created":
-            let model: StreamThreadRunStep? = StreamEvent.decodeData(data)
+        case "thread.run.step.created",
+            "thread.run.step.in_progress",
+            "thread.run.step.completed":
+            let model: RunStep? = StreamEvent.decodeData(data)
             guard let model else {
-                self = .error(.decodeError)
-                return
+                throw StreamError.decodeError
             }
-            
-            self = .threadRunStepCreated(model)
+
+            if eventName == "thread.run.step.created" {
+                self = .threadRunStepCreated(model)
+            } else if eventName == "thread.run.step.in_progress" {
+                self = .threadRunStepInProgress(model)
+            } else if eventName == "thread.run.step.completed" {
+                self = .threadRunStepCompleted(model)
+            }
         case "thread.message.created",
-            "thread.message.delta":
-            self = .error(.decodeError)
+            "thread.message.in_progress",
+            "thread.message.completed":
+            let model: Message? = StreamEvent.decodeData(data)
+            guard let model else {
+                throw StreamError.decodeError
+            }
+
+            if eventName == "thread.message.created" {
+                self = .threadMessageCreated(model)
+            } else if eventName == "thread.message.in_progress" {
+                self = .threadMessageInProgress(model)
+            } else if eventName == "thread.message.completed" {
+                self = .threadMessageCompleted(model)
+            }
+        case "thread.message.delta":
+            let model: DeltaMessage? = StreamEvent.decodeData(data)
+            guard let model else {
+                throw StreamError.decodeError
+            }
+
+            self = .threadMessageDelta(model)
+        case "done":
+            self = .done
         default:
-            return nil
+            throw StreamError.unknownEvent
         }
     }
 
     static private func decodeData<T: Decodable>(_ data: Data) -> T? {
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .secondsSince1970
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        
-        guard let model = try? decoder.decode(T.self, from: data) else {
+        guard let model = try? OpenAI.defaultDecoder.decode(T.self, from: data) else {
             return nil
         }
 

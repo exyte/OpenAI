@@ -30,25 +30,25 @@ public extension OpenAI {
 
     func uploadFile(payload: FilePayload) -> AnyPublisher<File, MoyaError> {
         filesProvider.requestPublisher(.uploadFile(payload: payload))
-            .map(File.self, using: defaultDecoder)
+            .map(File.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
     func listFiles() -> AnyPublisher<ObjectList<File>, MoyaError> {
         filesProvider.requestPublisher(.listFiles)
-            .map(ObjectList<File>.self, using: defaultDecoder)
+            .map(ObjectList<File>.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
     func retrieveFile(id: String) -> AnyPublisher<File, MoyaError> {
         filesProvider.requestPublisher(.retrieveFile(id: id))
-            .map(File.self, using: defaultDecoder)
+            .map(File.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
     func deleteFile(id: String) -> AnyPublisher<DeletionStatus, MoyaError> {
         filesProvider.requestPublisher(.deleteFile(id: id))
-            .map(DeletionStatus.self, using: defaultDecoder)
+            .map(DeletionStatus.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 

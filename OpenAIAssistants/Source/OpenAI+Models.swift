@@ -30,19 +30,19 @@ public extension OpenAI {
 
     func listModels() -> AnyPublisher<ObjectList<Model>, MoyaError> {
         modelsProvider.requestPublisher(.listModels)
-            .map(ObjectList<Model>.self, using: defaultDecoder)
+            .map(ObjectList<Model>.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
     func retrieveModel(with id: String) -> AnyPublisher<Model, MoyaError> {
         modelsProvider.requestPublisher(.retrieveModel(modelId: id))
-            .map(Model.self, using: defaultDecoder)
+            .map(Model.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
     func deleteModel(with id: String) -> AnyPublisher<DeletionStatus, MoyaError> {
         modelsProvider.requestPublisher(.deleteModel(modelId: id))
-            .map(DeletionStatus.self, using: defaultDecoder)
+            .map(DeletionStatus.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
