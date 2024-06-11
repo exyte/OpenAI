@@ -34,7 +34,7 @@ public struct RunStep: Codable {
     public let runId: String
     public let type: RunStepType
     public let status: RunStatus
-    public let stepDetails: RunStepDetails?
+    public let stepDetails: RunStepDetails
     public let lastError: RunError?
     public let expiredAt: Date?
     public let cancelledAt: Date?

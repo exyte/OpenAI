@@ -68,15 +68,9 @@ public extension OpenAI {
         src.onMessage { id, event, content in
             guard let event,
                   let data = content?.data(using: .utf8) else { return }
-
-            do {
-                if let streamEvent = try StreamEvent(eventName: event, data: data) {
-                    subject.send(streamEvent)
-                }
-            } catch(let error) {
-                if let streamError = error as? StreamError {
-                    subject.send(completion: .failure(streamError))
-                }
+            
+            if let streamEvent = StreamEvent(eventName: event, data: data) {
+                subject.send(streamEvent)
             }
         }
         src.connect()

@@ -28,7 +28,6 @@ public struct DeltaMessage: Codable {
     public let id: String
     public let object: String
     public let delta: Delta?
-    public let status: RunStatus?
 }
 
 public struct Delta: Codable {
