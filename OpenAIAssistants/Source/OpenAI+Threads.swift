@@ -30,13 +30,13 @@ public extension OpenAI {
 
     func createThread(from payload: CreateThreadPayload) -> AnyPublisher<Thread, MoyaError> {
         threadsProvider.requestPublisher(.createThread(payload: payload))
-            .map(Thread.self, using: defaultDecoder)
+            .map(Thread.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
     func retrieveThread(id: String) -> AnyPublisher<Thread, MoyaError> {
         threadsProvider.requestPublisher(.retrieveThread(threadId: id))
-            .map(Thread.self, using: defaultDecoder)
+            .map(Thread.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
@@ -47,13 +47,13 @@ public extension OpenAI {
                 payload: payload
             )
         )
-            .map(Thread.self, using: defaultDecoder)
+            .map(Thread.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
     func deleteThread(id: String) -> AnyPublisher<DeletionStatus, MoyaError> {
         threadsProvider.requestPublisher(.deleteThread(threadId: id))
-            .map(DeletionStatus.self, using: defaultDecoder)
+            .map(DeletionStatus.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 

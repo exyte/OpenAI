@@ -25,8 +25,9 @@
 import Foundation
 
 public struct DeltaMessage: Codable {
-    public let id, object: String
-    public let delta: Delta
+    public let id: String
+    public let object: String
+    public let delta: Delta?
 }
 
 public struct Delta: Codable {

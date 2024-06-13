@@ -27,13 +27,13 @@ import Foundation
 public struct RunStepDetails: Codable {
 
     public let type: RunStepType
-    public let messageCreation: MessageCreationDetails
-    public let toolCalls: [ToolCall]
-    
+    public let messageCreation: MessageCreationDetails?
+    public let toolCalls: [ToolCall]?
+
     public init(
         type: RunStepType,
-        messageCreation: MessageCreationDetails,
-        toolCalls: [ToolCall]
+        messageCreation: MessageCreationDetails? = nil,
+        toolCalls: [ToolCall]? = nil
     ) {
         self.type = type
         self.messageCreation = messageCreation

@@ -28,6 +28,9 @@ public enum StreamError: Error {
 
     case invalidJSON
     case invalidURL
+    case invalidEvent
+    case decodeError
+    case unknownEvent
     case custom(Error)
 
 }

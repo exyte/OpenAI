@@ -36,13 +36,13 @@ public extension OpenAI {
                 payload: payload
             )
         )
-            .map(Run.self, using: defaultDecoder)
-            .eraseToAnyPublisher()
+        .map(Run.self, using: OpenAI.defaultDecoder)
+        .eraseToAnyPublisher()
     }
 
-    func createStreamRun(in threadId: String, payload: CreateRunPayload) -> AnyPublisher<Message, StreamError> {
-        let subject = PassthroughSubject<Message, StreamError>()
-        guard let url = URL(string: "https://api.openai.com/v1/threads/\(threadId)/runs") else { 
+    func createStreamRun(in threadId: String, payload: CreateRunPayload) -> AnyPublisher<StreamEvent, StreamError> {
+        let subject = PassthroughSubject<StreamEvent, StreamError>()
+        guard let url = URL(string: "https://api.openai.com/v1/threads/\(threadId)/runs") else {
             subject.send(completion: .failure(.invalidURL))
             return subject.eraseToAnyPublisher()
         }
@@ -65,26 +65,14 @@ public extension OpenAI {
         }
 
         let src = EventSource(urlRequest: request)
-        var messageText = ""
-
-        src.onMessage { id, event, data in
-            guard let data, data != "[DONE]" else { return }
-
-            do {
-                let decoded = try JSONDecoder().decode(DeltaMessage.self, from: Data(data.utf8))
-                messageText += decoded.delta.content.first?.text.value ?? ""
-                let message = Message(id: "",
-                                      object: "",
-                                      createdAt: Date(),
-                                      threadId: threadId,
-                                      role: .assistant,
-                                      content: [MessageContent(type: .text, text: MessageTextContent(value: messageText))])
-                subject.send(message)
-            } catch {
-                subject.send(completion: .failure(.custom(error)))
+        src.onMessage { id, event, content in
+            guard let event,
+                  let data = content?.data(using: .utf8) else { return }
+            
+            if let streamEvent = StreamEvent(eventName: event, data: data) {
+                subject.send(streamEvent)
             }
         }
-
         src.connect()
         return subject.handleEvents(
             receiveCancel: {
@@ -95,7 +83,7 @@ public extension OpenAI {
 
     func createThreadAndRun(from payload: CreateThreadAndRunPayload) -> AnyPublisher<Run, MoyaError> {
         runsProvider.requestPublisher(.createThreadAndRun(payload: payload))
-            .map(Run.self, using: defaultDecoder)
+            .map(Run.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
@@ -106,7 +94,7 @@ public extension OpenAI {
                 payload: payload
             )
         )
-            .map(ObjectList<Run>.self, using: defaultDecoder)
+            .map(ObjectList<Run>.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
@@ -117,7 +105,7 @@ public extension OpenAI {
                 runId: id
             )
         )
-            .map(Run.self, using: defaultDecoder)
+            .map(Run.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
@@ -129,7 +117,7 @@ public extension OpenAI {
                 payload: payload
             )
         )
-            .map(Message.self, using: defaultDecoder)
+            .map(Message.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
@@ -140,7 +128,7 @@ public extension OpenAI {
                 runId: id
             )
         )
-            .map(Message.self, using: defaultDecoder)
+            .map(Message.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
@@ -152,7 +140,7 @@ public extension OpenAI {
                 payload: payload
             )
         )
-            .map(Run.self, using: defaultDecoder)
+            .map(Run.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
@@ -164,7 +152,7 @@ public extension OpenAI {
                 payload: payload
             )
         )
-            .map(ObjectList<RunStep>.self, using: defaultDecoder)
+            .map(ObjectList<RunStep>.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
@@ -176,7 +164,7 @@ public extension OpenAI {
                 runStepId: id
             )
         )
-            .map(Run.self, using: defaultDecoder)
+            .map(Run.self, using: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 

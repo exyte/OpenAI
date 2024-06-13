@@ -34,7 +34,7 @@ public final class OpenAI {
     let apiKey: String
     let organization: String?
 
-    lazy var defaultDecoder: JSONDecoder = {
+    static var defaultDecoder: JSONDecoder = {
         $0.dateDecodingStrategy = .secondsSince1970
         $0.keyDecodingStrategy = .convertFromSnakeCase
         return $0
