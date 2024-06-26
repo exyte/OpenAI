@@ -14,7 +14,54 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](https://opensource.org/licenses/MIT)
 
 # Usage
-...
+You'll need to create a `thread`, a `message` and a `run`.  A `thread` stores your messaging history with the bot. A `run` is a task you create to ask a specific bot to process the last message in a certain `thread`.
+The basic loop goes like this: user writes some input, you send this input to OpenAI's `thread` as a `message`, then create a `run` instance to process this input, check its status until it's done, fetch the response. Here is rough approximation of code:
+
+1. Get you apiKey and assistID, you'll need to create an account
+2. Create a client and a thread, store the threadID
+```swift
+client = OpenAI(apiKey: apiKey)
+
+let createThreadPayload = CreateThreadPayload(
+    messages: [],
+    metadata: [:]
+)
+client.createThread(from: createThreadPayload) <...>
+```
+3. Prepare the `message` to send to your `thread`
+```swift
+let createMessagePayload = CreateMessagePayload(role: .user, content: messageText)
+client.createMessage(in: threadID, payload: createMessagePayload) <...>
+```
+4. Create the `run`
+```swift
+let runPayload = CreateRunPayload(assistantId: assistID)
+client.createRun(in: threadID, payload: runPayload) <...>
+```
+5. Retreive the `run`'s status until it's done
+```swift
+func checkRunStatus() {
+	client.retrieveRun(id: runID, from: threadID)
+	.sink { result in
+	    <...>
+	} receiveValue: { [weak self] run in
+	    guard let self else { return }
+
+	    if run.status != .completed {
+	        usleep(300)
+	        checkRunStatus()
+	    } else {
+	        fetchResponse()
+	    }
+	}
+	.store(in: &subscriptions)
+}
+```
+6. Retrive the AI's response (lastMessageID is the id of the `message` from #3)
+```swift
+let listPayload = ListPayload(limit: 1, after: lastMessageID)
+client.listMessages(from: threadID, payload: listPayload) <...>
+```
 
 ## Examples
 
