@@ -13,8 +13,6 @@ final class AIManager {
 
     static let shared = AIManager()
 
-    private var client: OpenAI?
-
     private var apiKey: String {
         ""
     }
@@ -23,12 +21,9 @@ final class AIManager {
         ""
     }
 
+    private var client: OpenAI?
     private var threadID = ""
-    private var runID = ""
-    private var fileID: String?
-
     private var didReceiveResponse: ((String, String)->())?
-
     private var subscriptions = Set<AnyCancellable>()
 
     init() {
@@ -42,7 +37,7 @@ final class AIManager {
                 continuation.resume(returning: (id, text))
                 self.didReceiveResponse = nil
             }
-            sendMessage(messageText)
+            sendMessage(messageText, fileID: nil)
         }
     }
 }
@@ -76,14 +71,13 @@ private extension AIManager {
                     }
                 },
                 receiveValue: { [weak self] thread in
-                    print(thread)
                     self?.threadID = thread.id
                     UserDefaults.standard.setValue(thread.id, forKey: "thread_id")
                 })
             .store(in: &subscriptions)
     }
 
-    func sendMessage(_ messageText: String) {
+    func sendMessage(_ messageText: String, fileID: String?) {
         guard let client else { return }
 
         let createMessagePayload = CreateMessagePayload(role: .user, content: messageText)
@@ -97,7 +91,7 @@ private extension AIManager {
                     break
                 }
             } receiveValue: { [weak self] message in
-                self?.createRun()
+                self?.createRun(lastMessageID: message.id)
             }
             .store(in: &subscriptions)
     }
@@ -116,14 +110,12 @@ private extension AIManager {
                 }
             } receiveValue: { [weak self] file in
                 guard let self else { return }
-
-                fileID = file.id
-                sendMessage(messageText)
+                sendMessage(messageText, fileID: file.id)
             }
             .store(in: &subscriptions)
     }
 
-    func createRun() {
+    func createRun(lastMessageID: String) {
         guard let client else { return }
 
         let runPayload = CreateRunPayload(assistantId: assistID)
@@ -138,13 +130,12 @@ private extension AIManager {
             } receiveValue: { [weak self] run in
                 guard let self else { return }
 
-                runID = run.id
-                checkRunStatus()
+                checkRunStatus(runID: run.id, lastMessageID: lastMessageID)
             }
             .store(in: &subscriptions)
     }
 
-    func checkRunStatus() {
+    func checkRunStatus(runID: String, lastMessageID: String) {
         guard let client else { return }
 
         client.retrieveRun(id: runID, from: threadID)
@@ -160,19 +151,18 @@ private extension AIManager {
 
                 if run.status != .completed {
                     usleep(300)
-                    checkRunStatus()
+                    checkRunStatus(runID: runID, lastMessageID: lastMessageID)
                 } else {
-                    print(run.status)
-                    fetchResponse()
+                    fetchResponse(lastMessageID: lastMessageID)
                 }
             }
             .store(in: &subscriptions)
     }
 
-    func fetchResponse() {
+    func fetchResponse(lastMessageID: String) {
         guard let client else { return }
 
-        let listPayload = ListPayload()
+        let listPayload = ListPayload(limit: 1, after: lastMessageID)
         client.listMessages(from: threadID, payload: listPayload)
             .sink { result in
                 switch result {

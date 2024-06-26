@@ -16,5 +16,6 @@ struct BotChatView: View {
         ChatView(messages: viewModel.messages) { draft in
             viewModel.sendMessage(draft)
         }
+        .setAvailableInput(.textOnly)
     }
 }
