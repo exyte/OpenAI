@@ -13,11 +13,13 @@
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](https://opensource.org/licenses/MIT)
 
+### This is a community-maintained library
+
 # Usage
 You'll need to create a `thread`, a `message` and a `run`.  A `thread` stores your messaging history with the bot. A `run` is a task you create to ask a specific bot to process the last message in a certain `thread`.
 The basic loop goes like this: user writes some input, you send this input to OpenAI's `thread` as a `message`, then create a `run` instance to process this input, check its status until it's done, fetch the response. Here is rough approximation of code:
 
-1. Get you apiKey and assistID, you'll need to create an account
+1. Get you apiKey and assistID, you'll need to create an account. Please pass you keys to your app through *environment variables*
 2. Create a client and a thread, store the threadID
 ```swift
 client = OpenAI(apiKey: apiKey)
