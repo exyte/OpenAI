@@ -1,5 +1,5 @@
 //
-//  OpenAI+Models.swift
+//  FormBodyPart.swift
 //
 //  Copyright (c) 2024 Exyte
 //
@@ -23,29 +23,24 @@
 //
 
 import Foundation
-import Combine
 
-public extension OpenAI {
-
-    func listModels() -> AnyPublisher<ObjectList<Model>, OpenAIError> {
-        modelsProvider.requestPublisher(for: .listModels)
-            .map { $0.data }
-            .map(to: ObjectList<Model>.self, decoder: OpenAI.defaultDecoder)
-            .eraseToAnyPublisher()
+public struct FormBodyPart {
+    
+    public enum Value {
+        case fileURL(URL)
+        case data(Data)
+        case plainText(String)
     }
-
-    func retrieveModel(with id: String) -> AnyPublisher<Model, OpenAIError> {
-        modelsProvider.requestPublisher(for: .retrieveModel(modelId: id))
-            .map { $0.data }
-            .map(to: Model.self, decoder: OpenAI.defaultDecoder)
-            .eraseToAnyPublisher()
+    
+    public let name: String
+    public let value: Value
+    public let fileName: String?
+    public let mimeType: String?
+    
+    init(name: String, value: Value, fileName: String? = nil, mimeType: String? = nil) {
+        self.name = name
+        self.value = value
+        self.fileName = fileName
+        self.mimeType = mimeType
     }
-
-    func deleteModel(with id: String) -> AnyPublisher<DeletionStatus, OpenAIError> {
-        modelsProvider.requestPublisher(for: .deleteModel(modelId: id))
-            .map { $0.data }
-            .map(to: DeletionStatus.self, decoder: OpenAI.defaultDecoder)
-            .eraseToAnyPublisher()
-    }
-
 }

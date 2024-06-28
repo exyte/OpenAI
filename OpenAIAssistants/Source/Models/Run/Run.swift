@@ -40,7 +40,7 @@ public struct Run: Codable {
     public let failedAt: Date?
     public let completedAt: Date?
     public let model: ModelType
-    public let instructions: String
+    public let instructions: String?
     public let tools: [Tool]
     public let metadata: [String: String]?
     public let usage: UsageStatistics?

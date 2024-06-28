@@ -1,5 +1,5 @@
 //
-//  OpenAI+Models.swift
+//  HTTPHeader.swift
 //
 //  Copyright (c) 2024 Exyte
 //
@@ -23,29 +23,29 @@
 //
 
 import Foundation
-import Combine
 
-public extension OpenAI {
-
-    func listModels() -> AnyPublisher<ObjectList<Model>, OpenAIError> {
-        modelsProvider.requestPublisher(for: .listModels)
-            .map { $0.data }
-            .map(to: ObjectList<Model>.self, decoder: OpenAI.defaultDecoder)
-            .eraseToAnyPublisher()
+public enum HTTPHeader {
+    case authorization(bearerToken: String)
+    case contentType(value: String)
+    case openAIBeta(value: String)
+    
+    var name: String {
+        switch self {
+        case .authorization:
+            return "Authorization"
+        case .contentType:
+            return "Content-Type"
+        case .openAIBeta:
+            return "OpenAI-Beta"
+        }
     }
-
-    func retrieveModel(with id: String) -> AnyPublisher<Model, OpenAIError> {
-        modelsProvider.requestPublisher(for: .retrieveModel(modelId: id))
-            .map { $0.data }
-            .map(to: Model.self, decoder: OpenAI.defaultDecoder)
-            .eraseToAnyPublisher()
+    
+    var value: String {
+        switch self {
+        case .authorization(let bearerToken):
+            return "Bearer \(bearerToken)"
+        case .contentType(let value), .openAIBeta(let value):
+            return value
+        }
     }
-
-    func deleteModel(with id: String) -> AnyPublisher<DeletionStatus, OpenAIError> {
-        modelsProvider.requestPublisher(for: .deleteModel(modelId: id))
-            .map { $0.data }
-            .map(to: DeletionStatus.self, decoder: OpenAI.defaultDecoder)
-            .eraseToAnyPublisher()
-    }
-
 }

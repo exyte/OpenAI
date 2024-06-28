@@ -1,5 +1,5 @@
 //
-//  OpenAI+Models.swift
+//  OpenAIError.swift
 //
 //  Copyright (c) 2024 Exyte
 //
@@ -23,29 +23,29 @@
 //
 
 import Foundation
-import Combine
 
-public extension OpenAI {
+public enum OpenAIError: Error {
+    case invalidURL
+    
+    case requestCreationFailed
+    case incompatibleRequestTask
+    case requestFailed(underlyingError: Error)
+    case emptyResponse
+    case statusCode(code: Int, response: HTTPURLResponse)
+    case encodingFailed(underlyingError: Error?)
+    case decodingFailed(underlyingError: Error)
+    
+    case downloadFailed(String)
+    case emptyFileURL
+    case saveFailed(String)
+    
+    case underlying(Error)
+    case multipartEncoding(encodingError: MultipartEncodingError)
+}
 
-    func listModels() -> AnyPublisher<ObjectList<Model>, OpenAIError> {
-        modelsProvider.requestPublisher(for: .listModels)
-            .map { $0.data }
-            .map(to: ObjectList<Model>.self, decoder: OpenAI.defaultDecoder)
-            .eraseToAnyPublisher()
-    }
-
-    func retrieveModel(with id: String) -> AnyPublisher<Model, OpenAIError> {
-        modelsProvider.requestPublisher(for: .retrieveModel(modelId: id))
-            .map { $0.data }
-            .map(to: Model.self, decoder: OpenAI.defaultDecoder)
-            .eraseToAnyPublisher()
-    }
-
-    func deleteModel(with id: String) -> AnyPublisher<DeletionStatus, OpenAIError> {
-        modelsProvider.requestPublisher(for: .deleteModel(modelId: id))
-            .map { $0.data }
-            .map(to: DeletionStatus.self, decoder: OpenAI.defaultDecoder)
-            .eraseToAnyPublisher()
-    }
-
+public enum MultipartEncodingError {
+    case dataEncodingFailed
+    case fileEncodingFailed
+    case fileNotReachable
+    case invalidBodyPartURL
 }

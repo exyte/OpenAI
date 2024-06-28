@@ -24,53 +24,46 @@
 
 import Foundation
 import Combine
-import Moya
 
 public extension OpenAI {
 
-    func createAssistant(from payload: CreateAssistantPayload) -> AnyPublisher<Assistant, MoyaError> {
-        assistantsProvider.requestPublisher(.createAssistant(payload: payload))
-            .map(Assistant.self, using: OpenAI.defaultDecoder)
+    func createAssistant(from payload: CreateAssistantPayload) -> AnyPublisher<Assistant, OpenAIError> {
+        assistantsProvider.requestPublisher(for: .createAssistant(payload: payload))
+            .map { $0.data }
+            .map(to: Assistant.self, decoder: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
-    func modifyAssistant(id: String, payload: CreateAssistantPayload) -> AnyPublisher<Assistant, MoyaError> {
+    func modifyAssistant(id: String, payload: CreateAssistantPayload) -> AnyPublisher<Assistant, OpenAIError> {
         assistantsProvider.requestPublisher(
-            .modifyAssistant(
+            for: .modifyAssistant(
                 assistantId: id,
                 payload: payload
             )
         )
-            .map(Assistant.self, using: OpenAI.defaultDecoder)
+            .map { $0.data }
+            .map(to: Assistant.self, decoder: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
-    func deleteAssistant(id: String) -> AnyPublisher<DeletionStatus, MoyaError> {
-        assistantsProvider.requestPublisher(.deleteAssistant(assistantId: id))
-            .map(DeletionStatus.self, using: OpenAI.defaultDecoder)
+    func deleteAssistant(id: String) -> AnyPublisher<DeletionStatus, OpenAIError> {
+        assistantsProvider.requestPublisher(for: .deleteAssistant(assistantId: id))
+            .map { $0.data }
+            .map(to: DeletionStatus.self, decoder: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
-    func listAssistants(payload: ListPayload) -> AnyPublisher<ObjectList<Assistant>, MoyaError> {
-        assistantsProvider.requestPublisher(.listAssistants(payload: payload))
-            .map(ObjectList<Assistant>.self, using: OpenAI.defaultDecoder)
+    func listAssistants(payload: ListPayload) -> AnyPublisher<ObjectList<Assistant>, OpenAIError> {
+        assistantsProvider.requestPublisher(for: .listAssistants(payload: payload))
+            .map { $0.data }
+            .map(to: ObjectList<Assistant>.self, decoder: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
-    func retrieveAssistant(id: String) -> AnyPublisher<Assistant, MoyaError> {
-        assistantsProvider.requestPublisher(.retrieveAssistant(assistantId: id))
-            .map(Assistant.self, using: OpenAI.defaultDecoder)
-            .eraseToAnyPublisher()
-    }
-
-    func deleteAssistantFile(id: String, from assistantId: String) -> AnyPublisher<DeletionStatus, MoyaError> {
-        assistantsProvider.requestPublisher(
-            .deleteAssistantFile(
-                assistantId: assistantId,
-                fileId: id
-            )
-        )
-            .map(DeletionStatus.self, using: OpenAI.defaultDecoder)
+    func retrieveAssistant(id: String) -> AnyPublisher<Assistant, OpenAIError> {
+        assistantsProvider.requestPublisher(for: .retrieveAssistant(assistantId: id))
+            .map { $0.data }
+            .map(to: Assistant.self, decoder: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
