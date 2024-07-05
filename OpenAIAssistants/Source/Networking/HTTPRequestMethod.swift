@@ -1,5 +1,5 @@
 //
-//  OpenAI+Models.swift
+//  HTTPRequestMethod.swift
 //
 //  Copyright (c) 2024 Exyte
 //
@@ -23,29 +23,10 @@
 //
 
 import Foundation
-import Combine
 
-public extension OpenAI {
-
-    func listModels() -> AnyPublisher<ObjectList<Model>, OpenAIError> {
-        modelsProvider.requestPublisher(for: .listModels)
-            .map { $0.data }
-            .map(to: ObjectList<Model>.self, decoder: OpenAI.defaultDecoder)
-            .eraseToAnyPublisher()
-    }
-
-    func retrieveModel(with id: String) -> AnyPublisher<Model, OpenAIError> {
-        modelsProvider.requestPublisher(for: .retrieveModel(modelId: id))
-            .map { $0.data }
-            .map(to: Model.self, decoder: OpenAI.defaultDecoder)
-            .eraseToAnyPublisher()
-    }
-
-    func deleteModel(with id: String) -> AnyPublisher<DeletionStatus, OpenAIError> {
-        modelsProvider.requestPublisher(for: .deleteModel(modelId: id))
-            .map { $0.data }
-            .map(to: DeletionStatus.self, decoder: OpenAI.defaultDecoder)
-            .eraseToAnyPublisher()
-    }
-
+public enum HTTPRequestMethod: String {
+    case get = "GET"
+    case post = "POST"
+    case put = "PUT"
+    case delete = "DELETE"
 }

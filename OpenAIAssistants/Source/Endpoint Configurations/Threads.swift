@@ -1,5 +1,5 @@
 //
-//  CreateAssistantFilePayload.swift
+//  Threads.swift
 //
 //  Copyright (c) 2024 Exyte
 //
@@ -24,12 +24,48 @@
 
 import Foundation
 
-public struct CreateAssistantFilePayload: Codable {
+enum Threads {
 
-    public let fileId: String
-    
-    public init(fileId: String) {
-        self.fileId = fileId
+    case createThread(payload: CreateThreadPayload)
+    case retrieveThread(threadId: String)
+    case modifyThread(threadId: String, payload: ModifyPayload)
+    case deleteThread(threadId: String)
+
+}
+
+extension Threads: EndpointConfiguration {
+
+    var method: HTTPRequestMethod {
+        switch self {
+        case .createThread, .modifyThread:
+            return .post
+        case .retrieveThread:
+            return .get
+        case .deleteThread:
+            return .delete
+        }
     }
 
+    var path: String {
+        switch self {
+        case .createThread:
+            return "/threads"
+        case .retrieveThread(let threadId), .modifyThread(let threadId, _), .deleteThread(let threadId):
+            return "/threads/\(threadId)"
+        }
+    }
+
+    var task: RequestTask {
+        switch self {
+        case .createThread(let payload):
+            return .JSONEncodable(payload)
+        case .retrieveThread:
+            return .plain
+        case .modifyThread(_, let payload):
+            return .JSONEncodable(payload)
+        case .deleteThread:
+            return .plain
+        }
+    }
+    
 }

@@ -24,47 +24,50 @@
 
 import Foundation
 import Combine
-import Moya
 
 public extension OpenAI {
 
-    func createMessage(in threadId: String, payload: CreateMessagePayload) -> AnyPublisher<Message, MoyaError> {
-        messagesProvider.requestPublisher(.createMessage(threadId: threadId, payload: payload))
-            .map(Message.self, using: OpenAI.defaultDecoder)
+    func createMessage(in threadId: String, payload: CreateMessagePayload) -> AnyPublisher<Message, OpenAIError> {
+        messagesProvider.requestPublisher(for: .createMessage(threadId: threadId, payload: payload))
+            .map { $0.data }
+            .map(to: Message.self, decoder: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
-    func listMessages(from threadId: String, payload: ListPayload) -> AnyPublisher<ObjectList<Message>, MoyaError> {
+    func listMessages(from threadId: String, payload: ListPayload) -> AnyPublisher<ObjectList<Message>, OpenAIError> {
         messagesProvider.requestPublisher(
-            .listMessages(
+            for: .listMessages(
                 threadId: threadId,
                 payload: payload
             )
         )
-            .map(ObjectList<Message>.self, using: OpenAI.defaultDecoder)
+            .map { $0.data }
+            .map(to: ObjectList<Message>.self, decoder: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
-    func retrieveMessage(id: String, from threadId: String) -> AnyPublisher<Message, MoyaError> {
+    func retrieveMessage(id: String, from threadId: String) -> AnyPublisher<Message, OpenAIError> {
         messagesProvider.requestPublisher(
-            .retrieveMessage(
+            for: .retrieveMessage(
                 threadId: threadId,
                 messageId: id
             )
         )
-            .map(Message.self, using: OpenAI.defaultDecoder)
+            .map { $0.data }
+            .map(to: Message.self, decoder: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
-    func modifyMessage(id: String, from threadId: String, payload: ModifyPayload) -> AnyPublisher<Message, MoyaError> {
+    func modifyMessage(id: String, from threadId: String, payload: ModifyPayload) -> AnyPublisher<Message, OpenAIError> {
         messagesProvider.requestPublisher(
-            .modifyMessage(
+            for: .modifyMessage(
                 threadId: threadId,
                 messageId: id,
                 payload: payload
             )
         )
-            .map(Message.self, using: OpenAI.defaultDecoder)
+            .map { $0.data }
+            .map(to: Message.self, decoder: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 

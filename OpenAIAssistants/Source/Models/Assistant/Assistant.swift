@@ -80,20 +80,20 @@ public struct ToolResources: Codable {
 
 public struct CodeInterpreter: Codable {
 
-    public let fileIDS: [String]
+    public let fileIds: [String]
 
-    public init(fileIDS: [String]) {
-        self.fileIDS = fileIDS
+    public init(fileIds: [String]) {
+        self.fileIds = fileIds
     }
 
 }
 
 public struct FileSearch: Codable {
 
-    public let vectorStoreIDS: [String]
+    public let vectorStoreIds: [String]
 
-    public init(vectorStoreIDS: [String]) {
-        self.vectorStoreIDS = vectorStoreIDS
+    public init(vectorStoreIds: [String]) {
+        self.vectorStoreIds = vectorStoreIds
     }
 
 }

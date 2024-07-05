@@ -1,5 +1,5 @@
 //
-//  OpenAI+Models.swift
+//  CreateStreamRunPayload.swift
 //
 //  Copyright (c) 2024 Exyte
 //
@@ -23,29 +23,14 @@
 //
 
 import Foundation
-import Combine
 
-public extension OpenAI {
-
-    func listModels() -> AnyPublisher<ObjectList<Model>, OpenAIError> {
-        modelsProvider.requestPublisher(for: .listModels)
-            .map { $0.data }
-            .map(to: ObjectList<Model>.self, decoder: OpenAI.defaultDecoder)
-            .eraseToAnyPublisher()
+public struct CreateStreamRunPayload: Encodable {
+    
+    public let assistantId: String
+    public let stream: Bool = true
+    
+    public init(assistantId: String) {
+        self.assistantId = assistantId
     }
-
-    func retrieveModel(with id: String) -> AnyPublisher<Model, OpenAIError> {
-        modelsProvider.requestPublisher(for: .retrieveModel(modelId: id))
-            .map { $0.data }
-            .map(to: Model.self, decoder: OpenAI.defaultDecoder)
-            .eraseToAnyPublisher()
-    }
-
-    func deleteModel(with id: String) -> AnyPublisher<DeletionStatus, OpenAIError> {
-        modelsProvider.requestPublisher(for: .deleteModel(modelId: id))
-            .map { $0.data }
-            .map(to: DeletionStatus.self, decoder: OpenAI.defaultDecoder)
-            .eraseToAnyPublisher()
-    }
-
+    
 }
