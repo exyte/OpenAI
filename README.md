@@ -363,6 +363,7 @@ To try the OpenAIAssistants examples:
 - [x] Files
 - [x] Assistants
 - [x] Run streaming
+- [ ] Chat
 - [ ] Audio
 - [ ] Images
 - [ ] Moderations
