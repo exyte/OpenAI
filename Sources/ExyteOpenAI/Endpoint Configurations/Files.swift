@@ -73,7 +73,7 @@ extension Files: EndpointConfiguration {
             return .uploadMultipart(data)
         case .listFiles, .retrieveFile, .deleteFile:
             return .plain
-        case .retrieveFileContent(let id, let destination):
+        case .retrieveFileContent(_, let destination):
             return .download(destination)
         }
     }

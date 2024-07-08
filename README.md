@@ -19,24 +19,24 @@
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/exyte/openai-assistants-api")
+    .package(url: "https://github.com/exyte/OpenAI")
 ]
 ```
 
 ### [CocoaPods](http://cocoapods.org)
 
-To install `OpenAIAssistants`, simply add the following line to your Podfile:
+To install `OpenAI`, simply add the following line to your Podfile:
 
 ```ruby
-pod 'OpenAIAssistants'
+pod 'ExyteOpenAI'
 ```
 
 ### [Carthage](http://github.com/Carthage/Carthage)
 
-To integrate `OpenAIAssistants` into your Xcode project using Carthage, specify it in your `Cartfile`
+To integrate `OpenAI` into your Xcode project using Carthage, specify it in your `Cartfile`
 
 ```ogdl
-github "exyte/openai-assistants-api"
+github "exyte/OpenAI"
 ```
 
 ## Requirements
@@ -353,7 +353,7 @@ retrieveRunStep(id: runStepId, from: runId, in: threadId)
 ## Examples
 
 To try the OpenAIAssistants examples:
-- Clone the repo `https://github.com/exyte/openai-assistants-api`
+- Clone the repo `https://github.com/exyte/OpenAI`
 - Open OpenAIAssistantsExample/OpenAIAssistantsExample.xcodeproj
 - Try it!
 

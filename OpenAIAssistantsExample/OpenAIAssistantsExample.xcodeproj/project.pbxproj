@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5B79B8E22C3BD3AB00411EDE /* ExyteOpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 5B79B8E12C3BD3AB00411EDE /* ExyteOpenAI */; };
 		5BF4366B2C2AA23F0023B126 /* OpenAIAssistantsExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF4366A2C2AA23F0023B126 /* OpenAIAssistantsExampleApp.swift */; };
 		5BF4366D2C2AA23F0023B126 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF4366C2C2AA23F0023B126 /* ContentView.swift */; };
 		5BF4366F2C2AA2400023B126 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5BF4366E2C2AA2400023B126 /* Assets.xcassets */; };
@@ -14,11 +15,11 @@
 		5BF4367D2C2AA9680023B126 /* ExyteChat in Frameworks */ = {isa = PBXBuildFile; productRef = 5BF4367C2C2AA9680023B126 /* ExyteChat */; };
 		5BF436842C2AAB880023B126 /* BotChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF436822C2AAB880023B126 /* BotChatView.swift */; };
 		5BF436852C2AAB880023B126 /* BotChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF436832C2AAB880023B126 /* BotChatViewModel.swift */; };
-		5BF436892C2AADD00023B126 /* OpenAIAssistants in Frameworks */ = {isa = PBXBuildFile; productRef = 5BF436882C2AADD00023B126 /* OpenAIAssistants */; };
 		5BF4368B2C2AB7FC0023B126 /* AIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BF4368A2C2AB7FC0023B126 /* AIManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5B79B8DF2C3BD10400411EDE /* OpenAI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = OpenAI; path = ..; sourceTree = "<group>"; };
 		5BF436672C2AA23F0023B126 /* OpenAIAssistantsExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenAIAssistantsExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BF4366A2C2AA23F0023B126 /* OpenAIAssistantsExampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIAssistantsExampleApp.swift; sourceTree = "<group>"; };
 		5BF4366C2C2AA23F0023B126 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -26,7 +27,6 @@
 		5BF436712C2AA2400023B126 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		5BF436822C2AAB880023B126 /* BotChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BotChatView.swift; sourceTree = "<group>"; };
 		5BF436832C2AAB880023B126 /* BotChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BotChatViewModel.swift; sourceTree = "<group>"; };
-		5BF436862C2AAC610023B126 /* openai-assistants-api */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "openai-assistants-api"; path = ..; sourceTree = "<group>"; };
 		5BF4368A2C2AB7FC0023B126 /* AIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -35,8 +35,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B79B8E22C3BD3AB00411EDE /* ExyteOpenAI in Frameworks */,
 				5BF4367D2C2AA9680023B126 /* ExyteChat in Frameworks */,
-				5BF436892C2AADD00023B126 /* OpenAIAssistants in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -46,7 +46,7 @@
 		5BF4365E2C2AA23F0023B126 = {
 			isa = PBXGroup;
 			children = (
-				5BF436862C2AAC610023B126 /* openai-assistants-api */,
+				5B79B8DF2C3BD10400411EDE /* OpenAI */,
 				5BF436692C2AA23F0023B126 /* OpenAIAssistantsExample */,
 				5BF436682C2AA23F0023B126 /* Products */,
 				5BF436872C2AADD00023B126 /* Frameworks */,
@@ -108,7 +108,7 @@
 			name = OpenAIAssistantsExample;
 			packageProductDependencies = (
 				5BF4367C2C2AA9680023B126 /* ExyteChat */,
-				5BF436882C2AADD00023B126 /* OpenAIAssistants */,
+				5B79B8E12C3BD3AB00411EDE /* ExyteOpenAI */,
 			);
 			productName = OpenAIAssistantsExample;
 			productReference = 5BF436672C2AA23F0023B126 /* OpenAIAssistantsExample.app */;
@@ -390,14 +390,14 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		5B79B8E12C3BD3AB00411EDE /* ExyteOpenAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ExyteOpenAI;
+		};
 		5BF4367C2C2AA9680023B126 /* ExyteChat */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 5BF4367B2C2AA9680023B126 /* XCRemoteSwiftPackageReference "Chat" */;
 			productName = ExyteChat;
-		};
-		5BF436882C2AADD00023B126 /* OpenAIAssistants */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = OpenAIAssistants;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

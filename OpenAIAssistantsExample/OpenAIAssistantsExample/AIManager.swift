@@ -7,7 +7,7 @@
 
 import Foundation
 import Combine
-import OpenAIAssistants
+import ExyteOpenAI
 
 final class AIManager {
 
