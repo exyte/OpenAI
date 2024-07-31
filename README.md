@@ -363,8 +363,8 @@ To try the OpenAIAssistants examples:
 - [x] Files
 - [x] Assistants
 - [x] Run streaming
+- [x] Chat
 - [ ] Swift Concurrency support
-- [ ] Chat
 - [ ] Audio
 - [ ] Images
 - [ ] Moderations
