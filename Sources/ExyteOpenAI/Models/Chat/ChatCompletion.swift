@@ -31,7 +31,7 @@ public struct ChatCompletion: Codable {
     public let created: Date
     public let model: ModelType
     public let serviceTier: String?
-    public let systemFingerprint: String
+    public let systemFingerprint: String?
     public let object: String
     public let usage: UsageStatistics
 
@@ -42,7 +42,7 @@ public struct ChatCompletion: Codable {
         created: Date,
         model: ModelType,
         serviceTier: String? = nil,
-        systemFingerprint: String,
+        systemFingerprint: String? = nil,
         object: String,
         usage: UsageStatistics
     ) {
