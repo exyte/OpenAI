@@ -1,5 +1,5 @@
 //
-//  ToolType.swift
+//  FunctionToolProperties.swift
 //
 //  Copyright (c) 2024 Exyte
 //
@@ -24,11 +24,16 @@
 
 import Foundation
 
-public enum ToolType: String, Codable {
+public struct FunctionToolProperties: Codable {
 
-    case codeInterper = "code_interpreter"
-    case retrieval = "retrieval"
-    case function = "function"
-    case fileSearch = "file_search"
+    public let description: String
+    public let name: String
+    public let parameters: String
+    
+    public init(description: String, name: String, parameters: String) {
+        self.description = description
+        self.name = name
+        self.parameters = parameters
+    }
 
 }

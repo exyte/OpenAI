@@ -28,9 +28,9 @@ public struct ToolCall: Codable {
 
     public let id: String
     public let type: ToolType
-    public let function: Function
+    public let function: FunctionToolProperties
 
-    public init(id: String, type: ToolType, function: Function) {
+    public init(id: String, type: ToolType, function: FunctionToolProperties) {
         self.id = id
         self.type = type
         self.function = function

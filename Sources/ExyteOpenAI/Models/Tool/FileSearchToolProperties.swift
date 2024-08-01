@@ -1,5 +1,5 @@
 //
-//  Function.swift
+//  FileSearchToolProperties.swift
 //
 //  Copyright (c) 2024 Exyte
 //
@@ -24,16 +24,12 @@
 
 import Foundation
 
-public struct Function: Codable {
+public struct FileSearchToolProperties: Codable {
 
-    public let description: String
-    public let name: String
-    public let parameters: String
-    
-    public init(description: String, name: String, parameters: String) {
-        self.description = description
-        self.name = name
-        self.parameters = parameters
+    public let maxNumResults: Int?
+
+    public init(maxNumResults: Int? = nil) {
+        self.maxNumResults = maxNumResults
     }
 
 }
