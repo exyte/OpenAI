@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'ExyteOpenAI'
-  s.version          = '1.0.1'
+  s.version          = '1.0.2'
   s.summary          = 'OpenAI Assistants API client.'
   s.description      = 'Swift library for the OpenAI Assistants API'
   s.homepage         = 'https://github.com/exyte/OpenAI'
