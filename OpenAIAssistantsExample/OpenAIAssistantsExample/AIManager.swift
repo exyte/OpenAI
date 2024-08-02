@@ -10,23 +10,22 @@ import Combine
 import ExyteOpenAI
 
 final class AIManager {
+    private let apiKey: String = ""
+    private let assistantId: String = ""
 
-    static let shared = AIManager()
-
-    private var apiKey: String {
-        ""
-    }
-
-    private var assistID: String {
-        ""
-    }
-
-    private var client: OpenAI?
-    private var threadID = ""
+    private let client: OpenAI
+    private var threadId = ""
     private var didReceiveResponse: ((String, String)->())?
+
     private var subscriptions = Set<AnyCancellable>()
 
     init() {
+        guard !apiKey.isEmpty else {
+            fatalError("Empty OpenAI API key")
+        }
+        guard !assistantId.isEmpty else {
+            fatalError("Empty Assistant ID")
+        }
         client = OpenAI(apiKey: apiKey)
         createThreadIfNeeded()
     }
@@ -43,18 +42,15 @@ final class AIManager {
 }
 
 private extension AIManager {
-
     func createThreadIfNeeded() {
-        if let threadID = UserDefaults.standard.value(forKey: "thread_id") as? String {
-            self.threadID = threadID
-        } else {
+        guard let threadId = UserDefaults.standard.value(forKey: "thread_id") as? String else {
             createThread()
+            return
         }
+        self.threadId = threadId
     }
 
     func createThread() {
-        guard let client else { return }
-
         let createThreadPayload = CreateThreadPayload(
             messages: [],
             metadata: [:]
@@ -65,118 +61,117 @@ private extension AIManager {
                 receiveCompletion: { result in
                     switch result {
                     case .failure(let error):
-                        print(error)
+                        debugPrint(error)
                     case .finished:
                         break
                     }
                 },
                 receiveValue: { [weak self] thread in
-                    self?.threadID = thread.id
+                    self?.threadId = thread.id
                     UserDefaults.standard.setValue(thread.id, forKey: "thread_id")
-                })
+                }
+            )
             .store(in: &subscriptions)
     }
 
     func sendMessage(_ messageText: String, fileID: String?) {
-        guard let client else { return }
-
         let createMessagePayload = CreateMessagePayload(role: .user, content: messageText)
-
-        client.createMessage(in: threadID, payload: createMessagePayload)
-            .sink { result in
-                switch result {
-                case .failure(let error):
-                    print(error)
-                case .finished:
-                    break
+        client.createMessage(in: threadId, payload: createMessagePayload)
+            .sink(
+                receiveCompletion: { result in
+                    switch result {
+                    case .failure(let error):
+                        debugPrint(error)
+                    case .finished:
+                        break
+                    }
+                },
+                receiveValue: { [weak self] message in
+                    self?.createRun(lastMessageId: message.id)
                 }
-            } receiveValue: { [weak self] message in
-                self?.createRun(lastMessageID: message.id)
-            }
+            )
             .store(in: &subscriptions)
     }
 
     func sendMessage(_ messageText: String, fileURL: URL) {
-        guard let client else { return }
-
         let filePayload = FilePayload(purpose: .assistants, fileURL: fileURL)
         client.uploadFile(payload: filePayload)
-            .sink { result in
-                switch result {
-                case .failure(let error):
-                    print(error)
-                case .finished:
-                    break
+            .sink(
+                receiveCompletion: { result in
+                    switch result {
+                    case .failure(let error):
+                        debugPrint(error)
+                    case .finished:
+                        break
+                    }
+                },
+                receiveValue: { [weak self] file in
+                    self?.sendMessage(messageText, fileID: file.id)
                 }
-            } receiveValue: { [weak self] file in
-                guard let self else { return }
-                sendMessage(messageText, fileID: file.id)
-            }
+            )
             .store(in: &subscriptions)
     }
 
-    func createRun(lastMessageID: String) {
-        guard let client else { return }
-
-        let runPayload = CreateRunPayload(assistantId: assistID)
-        client.createRun(in: threadID, payload: runPayload)
-            .sink { result in
-                switch result {
-                case .failure(let error):
-                    print(error)
-                case .finished:
-                    break
+    func createRun(lastMessageId: String) {
+        let runPayload = CreateRunPayload(assistantId: assistantId)
+        client.createRun(in: threadId, payload: runPayload)
+            .sink(
+                receiveCompletion: { result in
+                    switch result {
+                    case .failure(let error):
+                        debugPrint(error)
+                    case .finished:
+                        break
+                    }
+                },
+                receiveValue: { [weak self] run in
+                    self?.checkRunStatus(runId: run.id, lastMessageId: lastMessageId)
                 }
-            } receiveValue: { [weak self] run in
-                guard let self else { return }
-
-                checkRunStatus(runID: run.id, lastMessageID: lastMessageID)
-            }
+            )
             .store(in: &subscriptions)
     }
 
-    func checkRunStatus(runID: String, lastMessageID: String) {
-        guard let client else { return }
-
-        client.retrieveRun(id: runID, from: threadID)
-            .sink { result in
-                switch result {
-                case .failure(let error):
-                    print(error)
-                case .finished:
-                    break
+    func checkRunStatus(runId: String, lastMessageId: String) {
+        client.retrieveRun(id: runId, from: threadId)
+            .sink(
+                receiveCompletion: { result in
+                    switch result {
+                    case .failure(let error):
+                        debugPrint(error)
+                    case .finished:
+                        break
+                    }
+                },
+                receiveValue: { [weak self] run in
+                    if run.status != .completed {
+                        usleep(300)
+                        self?.checkRunStatus(runId: runId, lastMessageId: lastMessageId)
+                    } else {
+                        self?.fetchResponse(lastMessageId: lastMessageId)
+                    }
                 }
-            } receiveValue: { [weak self] run in
-                guard let self else { return }
-
-                if run.status != .completed {
-                    usleep(300)
-                    checkRunStatus(runID: runID, lastMessageID: lastMessageID)
-                } else {
-                    fetchResponse(lastMessageID: lastMessageID)
-                }
-            }
+            )
             .store(in: &subscriptions)
     }
 
-    func fetchResponse(lastMessageID: String) {
-        guard let client else { return }
-
-        let listPayload = ListPayload(limit: 1, after: lastMessageID)
-        client.listMessages(from: threadID, payload: listPayload)
-            .sink { result in
-                switch result {
-                case .failure(let error):
-                    print(error)
-                case .finished:
-                    break
+    func fetchResponse(lastMessageId: String) {
+        let listPayload = ListPayload(limit: 1, order: .asc, after: lastMessageId)
+        client.listMessages(from: threadId, payload: listPayload)
+            .sink(
+                receiveCompletion: { result in
+                    switch result {
+                    case .failure(let error):
+                        debugPrint(error)
+                    case .finished:
+                        break
+                    }
+                },
+                receiveValue: { [weak self] list in
+                    guard let message = list.data.first,
+                          let textContent = message.content.first?.text?.value else { return }
+                    self?.didReceiveResponse?(message.id, textContent)
                 }
-            } receiveValue: { [weak self] list in
-                guard let self,
-                      let message = list.data.first else { return }
-
-                didReceiveResponse?(message.id, message.content.first?.text?.value ?? "")
-            }
+            )
             .store(in: &subscriptions)
     }
 }
