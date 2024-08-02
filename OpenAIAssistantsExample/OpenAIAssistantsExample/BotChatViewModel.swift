@@ -12,7 +12,7 @@ class BotChatViewModel: ObservableObject {
     
     @Published var messages: [Message] = []
 
-    private var aiManager = AIManager.shared
+    private var aiManager = AIManager()
 
     private var me = User(id: "me", name: "Me", avatarURL: nil, isCurrentUser: true)
     private var bot = User(id: "bot", name: "AIBot", avatarURL: nil, isCurrentUser: false)
