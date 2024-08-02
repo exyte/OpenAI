@@ -7,9 +7,9 @@
 
 <p><h4>This community-maintained library, written in Swift, provides an easy way to use the <a href="https://platform.openai.com/docs/api-reference/introduction">OpenAI REST API</a>.</h4></p>
 
-![](https://img.shields.io/github/v/tag/exyte/OpenAIAssistants?label=Version)
-[![SPM Compatible](https://img.shields.io/badge/SwiftPM-Compatible-brightgreen.svg)](https://swiftpackageindex.com/exyte/OpenAIAssistants)
-[![Cocoapods Compatible](https://img.shields.io/badge/cocoapods-Compatible-brightgreen.svg)](https://cocoapods.org/pods/OpenAIAssistants)
+![](https://img.shields.io/github/v/tag/exyte/OpenAI?label=Version)
+[![SPM Compatible](https://img.shields.io/badge/SwiftPM-Compatible-brightgreen.svg)](https://swiftpackageindex.com/exyte/OpenAI)
+[![Cocoapods Compatible](https://img.shields.io/badge/cocoapods-Compatible-brightgreen.svg)](https://cocoapods.org/pods/ExyteOpenAI)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-brightgreen.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](https://opensource.org/licenses/MIT)
 
