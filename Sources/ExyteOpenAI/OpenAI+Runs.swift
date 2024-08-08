@@ -26,6 +26,8 @@ import Foundation
 import Combine
 import EventSourceHttpBody
 
+// MARK: - Combine
+
 public extension OpenAI {
 
     func createRun(in threadId: String, payload: CreateRunPayload) -> AnyPublisher<Run, OpenAIError> {
@@ -173,4 +175,50 @@ public extension OpenAI {
             .eraseToAnyPublisher()
     }
 
+}
+
+// MARK: - Concurrency
+
+public extension OpenAI {
+
+    func createRun(in threadId: String, payload: CreateRunPayload) async throws -> Run {
+        try await createRun(in: threadId, payload: payload).async()
+    }
+    
+    func createStreamRun(in threadId: String, payload: CreateStreamRunPayload) async throws -> StreamEvent {
+        try await createStreamRun(in: threadId, payload: payload).async()
+    }
+    
+    func createThreadAndRun(from payload: CreateThreadAndRunPayload) async throws -> Run {
+        try await createThreadAndRun(from: payload).async()
+    }
+    
+    func listRuns(from threadId: String, payload: ListPayload) async throws -> ObjectList<Run> {
+        try await listRuns(from: threadId, payload: payload).async()
+    }
+    
+    func retrieveRun(id: String, from threadId: String) async throws -> Run {
+        try await retrieveRun(id: id, from: threadId).async()
+    }
+    
+    func modifyRun(id: String, from threadId: String, payload: ModifyPayload) async throws -> Run {
+        try await modifyRun(id: id, from: threadId, payload: payload).async()
+    }
+    
+    func cancelRun(id: String, from threadId: String) async throws -> Run {
+        try await cancelRun(id: id, from: threadId).async()
+    }
+    
+    func submitToolOutputs(to runId: String, from threadId: String, payload: SubmitToolOutputsPayload) async throws -> Run {
+        try await submitToolOutputs(to: runId, from: threadId, payload: payload).async()
+    }
+    
+    func listRunSteps(from runId: String, in threadId: String, payload: ListPayload) async throws -> ObjectList<RunStep> {
+        try await listRunSteps(from: runId, in: threadId, payload: payload).async()
+    }
+    
+    func retrieveRunStep(id: String, from runId: String, in threadId: String) async throws -> RunStep {
+        try await retrieveRunStep(id: id, from: runId, in: threadId).async()
+    }
+    
 }

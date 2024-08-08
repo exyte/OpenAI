@@ -25,6 +25,8 @@
 import Foundation
 import Combine
 
+// MARK: - Combine
+
 public extension OpenAI {
 
     func createThread(from payload: CreateThreadPayload) -> AnyPublisher<Thread, OpenAIError> {
@@ -58,6 +60,28 @@ public extension OpenAI {
             .map { $0.data }
             .map(to: DeletionStatus.self, decoder: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
+    }
+
+}
+
+// MARK: - Concurrency
+
+public extension OpenAI {
+
+    func createThread(from payload: CreateThreadPayload) async throws -> Thread {
+        try await createThread(from: payload).async()
+    }
+    
+    func retrieveThread(id: String) async throws -> Thread {
+        try await retrieveThread(id: id).async()
+    }
+    
+    func modifyThread(id: String, payload: ModifyPayload) async throws -> Thread {
+        try await modifyThread(id: id, payload: payload).async()
+    }
+    
+    func deleteThread(id: String) async throws -> DeletionStatus {
+        try await deleteThread(id: id).async()
     }
 
 }

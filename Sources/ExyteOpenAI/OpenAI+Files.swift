@@ -25,6 +25,8 @@
 import Foundation
 import Combine
 
+// MARK: - Combine
+
 public extension OpenAI {
 
     func uploadFile(payload: FilePayload) -> AnyPublisher<File, OpenAIError> {
@@ -61,6 +63,32 @@ public extension OpenAI {
     func retrieveFileContent(id: String, destinationURL: URL) -> AnyPublisher<URL, OpenAIError> {
         filesProvider.downloadTaskPublisher(for: .retrieveFileContent(id: id, destination: destinationURL))
             .eraseToAnyPublisher()
+    }
+
+}
+
+// MARK: - Concurrency
+
+public extension OpenAI {
+
+    func uploadFile(payload: FilePayload) async throws -> File {
+        try await uploadFile(payload: payload).async()
+    }
+    
+    func listFiles() async throws -> ObjectList<File> {
+        try await listFiles().async()
+    }
+    
+    func retrieveFile(id: String) async throws -> File {
+        try await retrieveFile(id: id).async()
+    }
+    
+    func deleteFile(id: String) async throws -> DeletionStatus {
+        try await deleteFile(id: id).async()
+    }
+    
+    func retrieveFileContent(id: String, destinationURL: URL) async throws -> URL {
+        try await retrieveFileContent(id: id, destinationURL: destinationURL).async()
     }
 
 }

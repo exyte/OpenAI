@@ -25,6 +25,8 @@
 import Foundation
 import Combine
 
+// MARK: - Combine
+
 public extension OpenAI {
 
     func createAssistant(from payload: CreateAssistantPayload) -> AnyPublisher<Assistant, OpenAIError> {
@@ -65,6 +67,32 @@ public extension OpenAI {
             .map { $0.data }
             .map(to: Assistant.self, decoder: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
+    }
+
+}
+
+// MARK: - Concurrency
+
+public extension OpenAI {
+
+    func createAssistant(from payload: CreateAssistantPayload) async throws -> Assistant {
+        try await createAssistant(from: payload).async()
+    }
+    
+    func modifyAssistant(id: String, payload: CreateAssistantPayload) async throws -> Assistant {
+        try await modifyAssistant(id: id, payload: payload).async()
+    }
+    
+    func deleteAssistant(id: String) async throws -> DeletionStatus {
+        try await deleteAssistant(id: id).async()
+    }
+    
+    func listAssistants(payload: ListPayload) async throws -> ObjectList<Assistant> {
+        try await listAssistants(payload: payload).async()
+    }
+    
+    func retrieveAssistant(id: String) async throws -> Assistant {
+        try await retrieveAssistant(id: id).async()
     }
 
 }
