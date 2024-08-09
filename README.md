@@ -85,6 +85,23 @@ For more detailed information about OpenAI Assistants API usage, please refer to
 
 # Available endpoints
 
+## Chat
+
+Creates a model response for the given chat conversation.
+
+### [Create chat completion](https://platform.openai.com/docs/api-reference/chat/create)
+
+```swift
+createChatCompletion(
+    from: CreateChatCompletionPayload(
+        model: model,
+        messages: [ChatCompletionMessage(role: .user, content: "Hello")]
+    )
+)
+```
+
+#### Returns `ChatCompletion`
+
 ## Models
 
 List and describe the various models available in the API. A list of models and their differences can be found on [platform.openai.com](https://platform.openai.com/docs/models).
@@ -364,7 +381,7 @@ To try the OpenAIAssistants examples:
 - [x] Assistants
 - [x] Run streaming
 - [x] Chat
-- [ ] Swift Concurrency support
+- [x] Swift Concurrency support
 - [ ] Audio
 - [ ] Images
 - [ ] Moderations
