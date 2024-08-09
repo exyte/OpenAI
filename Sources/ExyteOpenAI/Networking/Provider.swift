@@ -72,7 +72,7 @@ open class Provider<T: EndpointConfiguration> {
                 }
                 let statusCode = response.statusCode
                 guard 200...299 ~= response.statusCode else {
-                    promise(.failure(OpenAIError.statusCode(code: statusCode, response: response)))
+                    promise(.failure(OpenAIError.statusCode(code: statusCode, response: response, responseError: nil)))
                     return
                 }
                 guard let url else {
@@ -98,7 +98,11 @@ open class Provider<T: EndpointConfiguration> {
                 }
                 let statusCode = response.statusCode
                 guard 200...299 ~= response.statusCode else {
-                    throw OpenAIError.statusCode(code: statusCode, response: response)
+                    guard let error = try JSONDecoder().decode([String: OpenAIResponseError].self, from: result.data).values.first else {
+                        throw OpenAIError.statusCode(code: statusCode, response: response, responseError: nil)
+                    }
+                    throw OpenAIError.statusCode(code: statusCode, response: response, responseError: error)
+                    
                 }
                 return result
             }

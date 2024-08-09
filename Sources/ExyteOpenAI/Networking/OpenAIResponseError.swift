@@ -1,5 +1,5 @@
 //
-//  OpenAIError.swift
+//  OpenAIResponseError.swift
 //
 //  Copyright (c) 2024 Exyte
 //
@@ -24,28 +24,11 @@
 
 import Foundation
 
-public enum OpenAIError: Error {
-    case invalidURL
+public struct OpenAIResponseError: Codable {
     
-    case requestCreationFailed
-    case incompatibleRequestTask
-    case requestFailed(underlyingError: Error)
-    case emptyResponse
-    case statusCode(code: Int, response: HTTPURLResponse, responseError: OpenAIResponseError?)
-    case encodingFailed(underlyingError: Error?)
-    case decodingFailed(underlyingError: Error)
+    public let code: String?
+    public let message: String?
+    public let param: String?
+    public let type: String?
     
-    case downloadFailed(String)
-    case emptyFileURL
-    case saveFailed(String)
-    
-    case underlying(Error)
-    case multipartEncoding(encodingError: MultipartEncodingError)
-}
-
-public enum MultipartEncodingError {
-    case dataEncodingFailed
-    case fileEncodingFailed
-    case fileNotReachable
-    case invalidBodyPartURL
 }
