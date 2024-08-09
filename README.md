@@ -44,6 +44,20 @@ github "exyte/OpenAI"
 * iOS 16+, tvOS 16+, macOS 13+, watchOS 8+
 * Xcode 15+
 
+## Development Roadmap
+
+- [x] Models
+- [x] Files
+- [x] Assistants
+- [x] Run streaming
+- [x] Chat
+- [x] Swift Concurrency support
+- [ ] Audio
+- [ ] Images
+- [ ] Moderations
+- [ ] Fine-tuning
+- [ ] Vector Store Files
+
 # Assistants API usage
 
 1. [Obtain](https://platform.openai.com/account/api-keys) your API key. Do not share this with others or expose it in any client-side code.
@@ -373,20 +387,6 @@ To try the OpenAIAssistants examples:
 - Clone the repo `https://github.com/exyte/OpenAI`
 - Open OpenAIAssistantsExample/OpenAIAssistantsExample.xcodeproj
 - Try it!
-
-## Development Roadmap
-
-- [x] Models
-- [x] Files
-- [x] Assistants
-- [x] Run streaming
-- [x] Chat
-- [x] Swift Concurrency support
-- [ ] Audio
-- [ ] Images
-- [ ] Moderations
-- [ ] Fine-tuning
-- [ ] Vector Store Files
 
 ## Our other open source SwiftUI libraries
 [PopupView](https://github.com/exyte/PopupView) - Toasts and popups library    
