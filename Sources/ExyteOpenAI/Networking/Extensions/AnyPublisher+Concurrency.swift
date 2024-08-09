@@ -1,5 +1,5 @@
 //
-//  OpenAI+Chats.swift
+//  AnyPublisher+Concurrency.swift
 //
 //  Copyright (c) 2024 Exyte
 //
@@ -22,28 +22,34 @@
 //  THE SOFTWARE.
 //
 
-import Foundation
 import Combine
+import Foundation
 
-// MARK: - Combine
-
-public extension OpenAI {
-
-    func createChatCompletion(from payload: CreateChatCompletionPayload) -> AnyPublisher<ChatCompletion, OpenAIError> {
-        chatsProvider.requestPublisher(for: .createChatCompletion(payload: payload))
-            .map { $0.data }
-            .map(to: ChatCompletion.self, decoder: OpenAI.defaultDecoder)
-            .eraseToAnyPublisher()
+extension AnyPublisher {
+    func async() async throws -> Output {
+        try await withCheckedThrowingContinuation { continuation in
+            var cancellable: AnyCancellable?
+            var finishedWithoutValue = true
+            cancellable = first()
+                .sink(
+                    receiveCompletion: { result in
+                        switch result {
+                        case .finished:
+                            if finishedWithoutValue {
+                                continuation.resume(throwing: OpenAIError.emptyResponse)
+                            }
+                        case .failure(let error):
+                            continuation.resume(throwing: error)
+                        }
+                        cancellable?.cancel()
+                    
+                    },
+                    receiveValue: { value in
+                        finishedWithoutValue = false
+                        continuation.resume(with: .success(value))
+                    
+                    }
+                )
+        }
     }
-
-}
-
-// MARK: - Concurrency
-
-public extension OpenAI {
-
-    func createChatCompletion(from payload: CreateChatCompletionPayload) async throws -> ChatCompletion {
-        try await createChatCompletion(from: payload).async()
-    }
-
 }

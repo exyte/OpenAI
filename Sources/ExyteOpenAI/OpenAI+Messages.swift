@@ -25,6 +25,8 @@
 import Foundation
 import Combine
 
+// MARK: - Combine
+
 public extension OpenAI {
 
     func createMessage(in threadId: String, payload: CreateMessagePayload) -> AnyPublisher<Message, OpenAIError> {
@@ -69,6 +71,28 @@ public extension OpenAI {
             .map { $0.data }
             .map(to: Message.self, decoder: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
+    }
+
+}
+
+// MARK: - Concurrency
+
+public extension OpenAI {
+
+    func createMessage(in threadId: String, payload: CreateMessagePayload) async throws -> Message {
+        try await createMessage(in: threadId, payload: payload).async()
+    }
+    
+    func listMessages(from threadId: String, payload: ListPayload) async throws -> ObjectList<Message> {
+        try await listMessages(from: threadId, payload: payload).async()
+    }
+    
+    func retrieveMessage(id: String, from threadId: String) async throws -> Message {
+        try await retrieveMessage(id: id, from: threadId).async()
+    }
+    
+    func modifyMessage(id: String, from threadId: String, payload: ModifyPayload) async throws -> Message {
+        try await modifyMessage(id: id, from: threadId, payload: payload).async()
     }
 
 }

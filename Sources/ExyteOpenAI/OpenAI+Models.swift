@@ -25,6 +25,8 @@
 import Foundation
 import Combine
 
+// MARK: - Combine
+
 public extension OpenAI {
 
     func listModels() -> AnyPublisher<ObjectList<Model>, OpenAIError> {
@@ -46,6 +48,24 @@ public extension OpenAI {
             .map { $0.data }
             .map(to: DeletionStatus.self, decoder: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
+    }
+
+}
+
+// MARK: - Concurrency
+
+public extension OpenAI {
+
+    func listModels() async throws -> ObjectList<Model> {
+        try await listModels().async()
+    }
+    
+    func retrieveModel(with id: String) async throws -> Model {
+        try await retrieveModel(with: id).async()
+    }
+    
+    func deleteModel(with id: String) async throws -> DeletionStatus {
+        try await deleteModel(with: id).async()
     }
 
 }
