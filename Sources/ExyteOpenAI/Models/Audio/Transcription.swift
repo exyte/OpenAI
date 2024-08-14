@@ -1,5 +1,5 @@
 //
-//  FormBodyPart.swift
+//  Transcription.swift
 //
 //  Copyright (c) 2024 Exyte
 //
@@ -24,25 +24,26 @@
 
 import Foundation
 
-public struct FormBodyPart {
-    
-    public enum Value {
-        case fileURL(URL)
-        case data(Data)
-        case plainText(String)
-        case integer(Int)
-        case floatingPoint(Float)
+public struct Transcription: Codable {
+
+    let text: String
+    let language: String?
+    let duration: Double?
+    let words: String?
+    let segments: [TranscriptionSegment]?
+
+    public init(
+        text: String,
+        language: String? = nil,
+        duration: Double? = nil,
+        words: String? = nil,
+        segments: [TranscriptionSegment]? = nil
+    ) {
+        self.text = text
+        self.language = language
+        self.duration = duration
+        self.words = words
+        self.segments = segments
     }
-    
-    public let name: String
-    public let value: Value
-    public let fileName: String?
-    public let mimeType: String?
-    
-    init(name: String, value: Value, fileName: String? = nil, mimeType: String? = nil) {
-        self.name = name
-        self.value = value
-        self.fileName = fileName
-        self.mimeType = mimeType
-    }
+
 }

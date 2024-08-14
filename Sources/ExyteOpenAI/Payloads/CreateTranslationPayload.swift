@@ -1,5 +1,5 @@
 //
-//  FormBodyPart.swift
+//  CreateTranslationPayload.swift
 //
 //  Copyright (c) 2024 Exyte
 //
@@ -24,25 +24,26 @@
 
 import Foundation
 
-public struct FormBodyPart {
-    
-    public enum Value {
-        case fileURL(URL)
-        case data(Data)
-        case plainText(String)
-        case integer(Int)
-        case floatingPoint(Float)
+public struct CreateTranslationPayload: Codable {
+
+    let file: URL
+    let model: STTModel
+    let prompt: String?
+    let responseFormat: TextResponseFormat?
+    let temperature: Double?
+
+    public init(
+        file: URL,
+        model: STTModel,
+        prompt: String? = nil,
+        responseFormat: TextResponseFormat? = nil,
+        temperature: Double? = nil
+    ) {
+        self.file = file
+        self.model = model
+        self.prompt = prompt
+        self.responseFormat = responseFormat
+        self.temperature = temperature
     }
-    
-    public let name: String
-    public let value: Value
-    public let fileName: String?
-    public let mimeType: String?
-    
-    init(name: String, value: Value, fileName: String? = nil, mimeType: String? = nil) {
-        self.name = name
-        self.value = value
-        self.fileName = fileName
-        self.mimeType = mimeType
-    }
+
 }

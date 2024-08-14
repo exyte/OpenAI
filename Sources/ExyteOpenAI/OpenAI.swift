@@ -47,6 +47,7 @@ public final class OpenAI {
     let runsProvider: Provider<Runs>
     let filesProvider: Provider<Files>
     let chatsProvider: Provider<Chats>
+    let audioProvider: Provider<Audio>
 
     public init(apiKey: String, organization: String? = nil) {
         self.apiKey = apiKey
@@ -60,6 +61,7 @@ public final class OpenAI {
         messagesProvider = Provider<Messages>(with: apiKey)
         runsProvider = Provider<Runs>(with: apiKey)
         chatsProvider = Provider<Chats>(with: apiKey)
+        audioProvider = Provider<Audio>(with: apiKey)
     }
 
 }
