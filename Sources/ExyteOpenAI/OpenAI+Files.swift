@@ -61,7 +61,7 @@ public extension OpenAI {
     /// You can’t download files that you’ve uploaded to the assistants yourself.
     /// If these files are important, you should consider storing a copy of these files before they’re uploaded.
     func retrieveFileContent(id: String, destinationURL: URL) -> AnyPublisher<URL, OpenAIError> {
-        filesProvider.downloadTaskPublisher(for: .retrieveFileContent(id: id, destination: destinationURL))
+        filesProvider.downloadPublisher(for: .retrieveFileContent(id: id, destination: destinationURL))
             .eraseToAnyPublisher()
     }
 

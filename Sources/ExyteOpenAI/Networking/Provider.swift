@@ -48,20 +48,29 @@ open class Provider<T: EndpointConfiguration> {
             .eraseToAnyPublisher()
     }
     
-    open func downloadTaskPublisher(for endpoint: T) -> AnyPublisher<URL, OpenAIError> {
+    open func downloadPublisher(for endpoint: T) -> AnyPublisher<URL, OpenAIError> {
+        guard case let .download(_, destinationURL) = endpoint.task else {
+            return Fail<URL, OpenAIError>(error: OpenAIError.incompatibleRequestTask)
+                .eraseToAnyPublisher()
+        }
+        return createRequestPublisher(for: endpoint)
+            .flatMap { [weak self] in
+                guard let self else {
+                    return Fail<URL, OpenAIError>(error: OpenAIError.requestCreationFailed)
+                        .eraseToAnyPublisher()
+                }
+                return self.downloadTaskPublisher(for: $0, with: destinationURL)
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    private func downloadTaskPublisher(for request: URLRequest, with destinationURL: URL) -> AnyPublisher<URL, OpenAIError> {
         Future<URL, OpenAIError> { [weak self] promise in
             guard let self else {
                 promise(.failure(.requestCreationFailed))
                 return
             }
-            guard case let .download(destinationURL) = endpoint.task else {
-                promise(.failure(OpenAIError.incompatibleRequestTask))
-                return
-            }
-            var urlRequest = URLRequest(url: OpenAI.baseURL.appending(path: endpoint.path))
-            urlRequest.httpMethod = endpoint.method.rawValue
-            urlRequest.allHTTPHeaderFields = mandatoryHeaders.dictionary
-            URLSession.shared.downloadTask(with: urlRequest) { url, response, error in
+            URLSession.shared.downloadTask(with: request) { url, response, error in
                 if let error {
                     promise(.failure(OpenAIError.requestFailed(underlyingError: error)))
                     return
@@ -184,7 +193,21 @@ open class Provider<T: EndpointConfiguration> {
                         promise(.failure(OpenAIError.underlying(error)))
                     }
                 }
-            case .download:
+            case .download(let encodable, _):
+                if let encodable {
+                    var headers = mandatoryHeaders
+                    headers.append(.contentType(value: MimeType.json))
+                    urlRequest.allHTTPHeaderFields = headers.dictionary
+                    let encoder = JSONEncoder()
+                    encoder.keyEncodingStrategy = .convertToSnakeCase
+                    do {
+                        let data = try encoder.encode(encodable)
+                        urlRequest.httpBody = data
+                        promise(.success(urlRequest))
+                    } catch {
+                        promise(.failure(.encodingFailed(underlyingError: error)))
+                    }
+                }
                 promise(.success(urlRequest))
             }
         }

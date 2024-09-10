@@ -30,7 +30,7 @@ import Combine
 public extension OpenAI {
 
     func createSpeechPayload(from payload: CreateSpeechPayload, destination: URL) -> AnyPublisher<URL, OpenAIError> {
-        audioProvider.downloadTaskPublisher(for: .createSpeechPayload(payload: payload, destination: destination))
+        audioProvider.downloadPublisher(for: .createSpeechPayload(payload: payload, destination: destination))
             .eraseToAnyPublisher()
     }
 

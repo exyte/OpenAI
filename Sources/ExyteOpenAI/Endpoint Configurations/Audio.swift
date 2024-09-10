@@ -135,7 +135,7 @@ extension Audio: EndpointConfiguration {
             }
             return .uploadMultipart(data)
         case .createSpeechPayload(let payload, let destination):
-            return .download(destination)
+            return .download(payload, destination)
         }
     }
 
