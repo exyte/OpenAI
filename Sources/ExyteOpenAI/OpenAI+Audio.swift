@@ -41,10 +41,38 @@ public extension OpenAI {
             .eraseToAnyPublisher()
     }
 
+    func createTranscription(from payload: CreateTranscriptionPayload) -> AnyPublisher<String, OpenAIError> {
+        audioProvider.requestPublisher(for: .createTranscription(payload: payload))
+            .flatMap {
+                guard let stringData = String(data: $0.data, encoding: .utf8) else {
+                    return Fail<String, OpenAIError>(error: .requestCreationFailed)
+                        .eraseToAnyPublisher()
+                }
+                return Just<String>(stringData)
+                    .setFailureType(to: OpenAIError.self)
+                    .eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
+    }
+
     func createTranslation(from payload: CreateTranslationPayload) -> AnyPublisher<Translation, OpenAIError> {
         audioProvider.requestPublisher(for: .createTranslation(payload: payload))
             .map { $0.data }
             .map(to: Translation.self, decoder: OpenAI.defaultDecoder)
+            .eraseToAnyPublisher()
+    }
+
+    func createTranslation(from payload: CreateTranslationPayload) -> AnyPublisher<String, OpenAIError> {
+        audioProvider.requestPublisher(for: .createTranslation(payload: payload))
+            .flatMap {
+                guard let stringData = String(data: $0.data, encoding: .utf8) else {
+                    return Fail<String, OpenAIError>(error: .requestCreationFailed)
+                        .eraseToAnyPublisher()
+                }
+                return Just<String>(stringData)
+                    .setFailureType(to: OpenAIError.self)
+                    .eraseToAnyPublisher()
+            }
             .eraseToAnyPublisher()
     }
 
@@ -62,7 +90,15 @@ public extension OpenAI {
         try await createTranscription(from: payload).async()
     }
 
+    func createTranscription(from payload: CreateTranscriptionPayload) async throws -> String {
+        try await createTranscription(from: payload).async()
+    }
+
     func createTranslation(from payload: CreateTranslationPayload) async throws -> Translation {
+        try await createTranslation(from: payload).async()
+    }
+
+    func createTranslation(from payload: CreateTranslationPayload) async throws -> String {
         try await createTranslation(from: payload).async()
     }
 
