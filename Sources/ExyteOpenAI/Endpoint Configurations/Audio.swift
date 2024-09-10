@@ -70,7 +70,7 @@ extension Audio: EndpointConfiguration {
                 data.append(
                     FormBodyPart(
                         name: "temperature",
-                        value: .floatingPoint(Float(temperature))
+                        value: .floatingPoint(temperature)
                     )
                 )
             }
@@ -129,7 +129,7 @@ extension Audio: EndpointConfiguration {
                 data.append(
                     FormBodyPart(
                         name: "temperature",
-                        value: .floatingPoint(Float(temperature))
+                        value: .floatingPoint(temperature)
                     )
                 )
             }

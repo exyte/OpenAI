@@ -31,7 +31,7 @@ public struct FormBodyPart {
         case data(Data)
         case plainText(String)
         case integer(Int)
-        case floatingPoint(Float)
+        case floatingPoint(Double)
     }
     
     public let name: String
