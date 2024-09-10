@@ -257,24 +257,18 @@ open class Provider<T: EndpointConfiguration> {
                     throw OpenAIError.multipartEncoding(encodingError: .dataEncodingFailed)
                 }
                 bodyData = textData
-            case .floatingPoint(let float):
+            case .floatingPoint(let value):
                 mimeType = $0.mimeType ?? MimeType.unknownBinary
-                let encoder = JSONEncoder()
-                encoder.keyEncodingStrategy = .convertToSnakeCase
-                do {
-                    let numberData = try encoder.encode(float)
+                if let numberData = "\(value)".data(using: .utf8) {
                     bodyData = numberData
-                } catch {
+                } else {
                     throw OpenAIError.multipartEncoding(encodingError: .dataEncodingFailed)
                 }
-            case .integer(let integer):
+            case .integer(let value):
                 mimeType = $0.mimeType ?? MimeType.unknownBinary
-                let encoder = JSONEncoder()
-                encoder.keyEncodingStrategy = .convertToSnakeCase
-                do {
-                    let numberData = try encoder.encode(integer)
+                if let numberData = "\(value)".data(using: .utf8) {
                     bodyData = numberData
-                } catch {
+                } else {
                     throw OpenAIError.multipartEncoding(encodingError: .dataEncodingFailed)
                 }
             }
