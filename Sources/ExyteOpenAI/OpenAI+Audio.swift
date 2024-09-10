@@ -29,20 +29,20 @@ import Combine
 
 public extension OpenAI {
 
-    func createSpeechPayload(from payload: CreateSpeechPayload, destination: URL) -> AnyPublisher<URL, OpenAIError> {
-        audioProvider.downloadPublisher(for: .createSpeechPayload(payload: payload, destination: destination))
+    func createSpeech(from payload: CreateSpeechPayload, destination: URL) -> AnyPublisher<URL, OpenAIError> {
+        audioProvider.downloadPublisher(for: .createSpeech(payload: payload, destination: destination))
             .eraseToAnyPublisher()
     }
 
-    func createTranscriptionPayload(from payload: CreateTranscriptionPayload) -> AnyPublisher<Transcription, OpenAIError> {
-        audioProvider.requestPublisher(for: .createTranscriptionPayload(payload: payload))
+    func createTranscription(from payload: CreateTranscriptionPayload) -> AnyPublisher<Transcription, OpenAIError> {
+        audioProvider.requestPublisher(for: .createTranscription(payload: payload))
             .map { $0.data }
             .map(to: Transcription.self, decoder: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
     }
 
-    func createTranslationPayload(from payload: CreateTranslationPayload) -> AnyPublisher<Translation, OpenAIError> {
-        audioProvider.requestPublisher(for: .createTranslationPayload(payload: payload))
+    func createTranslation(from payload: CreateTranslationPayload) -> AnyPublisher<Translation, OpenAIError> {
+        audioProvider.requestPublisher(for: .createTranslation(payload: payload))
             .map { $0.data }
             .map(to: Translation.self, decoder: OpenAI.defaultDecoder)
             .eraseToAnyPublisher()
@@ -54,16 +54,16 @@ public extension OpenAI {
 
 public extension OpenAI {
 
-    func createSpeechPayload(from payload: CreateSpeechPayload, destination: URL) async throws -> URL {
-        try await createSpeechPayload(from: payload, destination: destination).async()
+    func createSpeech(from payload: CreateSpeechPayload, destination: URL) async throws -> URL {
+        try await createSpeech(from: payload, destination: destination).async()
     }
 
-    func createTranscriptionPayload(from payload: CreateTranscriptionPayload) async throws -> Transcription {
-        try await createTranscriptionPayload(from: payload).async()
+    func createTranscription(from payload: CreateTranscriptionPayload) async throws -> Transcription {
+        try await createTranscription(from: payload).async()
     }
 
-    func createTranslationPayload(from payload: CreateTranslationPayload) async throws -> Translation {
-        try await createTranslationPayload(from: payload).async()
+    func createTranslation(from payload: CreateTranslationPayload) async throws -> Translation {
+        try await createTranslation(from: payload).async()
     }
 
 }

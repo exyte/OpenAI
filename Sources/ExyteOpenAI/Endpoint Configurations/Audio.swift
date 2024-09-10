@@ -25,9 +25,9 @@
 import Foundation
 
 enum Audio {
-    case createTranscriptionPayload(payload: CreateTranscriptionPayload)
-    case createTranslationPayload(payload: CreateTranslationPayload)
-    case createSpeechPayload(payload: CreateSpeechPayload, destination: URL)
+    case createTranscription(payload: CreateTranscriptionPayload)
+    case createTranslation(payload: CreateTranslationPayload)
+    case createSpeech(payload: CreateSpeechPayload, destination: URL)
 }
 
 extension Audio: EndpointConfiguration {
@@ -38,18 +38,18 @@ extension Audio: EndpointConfiguration {
 
     var path: String {
         switch self {
-        case .createTranscriptionPayload:
+        case .createTranscription:
             return "/audio/transcriptions"
-        case .createTranslationPayload:
+        case .createTranslation:
             return "/audio/translations"
-        case .createSpeechPayload:
+        case .createSpeech:
             return "/audio/speech"
         }
     }
 
     var task: RequestTask {
         switch self {
-        case .createTranscriptionPayload(let payload):
+        case .createTranscription(let payload):
             var data: [FormBodyPart] = [
                 FormBodyPart(
                     name: "file",
@@ -100,7 +100,7 @@ extension Audio: EndpointConfiguration {
                 )
             }
             return .uploadMultipart(data)
-        case .createTranslationPayload(let payload):
+        case .createTranslation(let payload):
             var data: [FormBodyPart] = [
                 FormBodyPart(
                     name: "file",
@@ -134,7 +134,7 @@ extension Audio: EndpointConfiguration {
                 )
             }
             return .uploadMultipart(data)
-        case .createSpeechPayload(let payload, let destination):
+        case .createSpeech(let payload, let destination):
             return .download(payload, destination)
         }
     }
