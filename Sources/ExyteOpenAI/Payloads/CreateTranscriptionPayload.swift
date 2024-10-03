@@ -1,5 +1,5 @@
 //
-//  FormBodyPart.swift
+//  CreateTranscriptionPayload.swift
 //
 //  Copyright (c) 2024 Exyte
 //
@@ -24,25 +24,32 @@
 
 import Foundation
 
-public struct FormBodyPart {
-    
-    public enum Value {
-        case fileURL(URL)
-        case data(Data)
-        case plainText(String)
-        case integer(Int)
-        case floatingPoint(Double)
+public struct CreateTranscriptionPayload: Codable {
+
+    let file: URL
+    let model: STTModel
+    let language: String?
+    let prompt: String?
+    let responseFormat: TextResponseFormat?
+    let temperature: Double?
+    let timestampGranularities: [TimestampGranularity]?
+
+    public init(
+        file: URL,
+        model: STTModel,
+        language: String? = nil,
+        prompt: String? = nil,
+        responseFormat: TextResponseFormat? = nil,
+        temperature: Double? = nil,
+        timestampGranularities: [TimestampGranularity]? = nil
+    ) {
+        self.file = file
+        self.model = model
+        self.language = language
+        self.prompt = prompt
+        self.responseFormat = responseFormat
+        self.timestampGranularities = timestampGranularities
+        self.temperature = temperature
     }
-    
-    public let name: String
-    public let value: Value
-    public let fileName: String?
-    public let mimeType: String?
-    
-    init(name: String, value: Value, fileName: String? = nil, mimeType: String? = nil) {
-        self.name = name
-        self.value = value
-        self.fileName = fileName
-        self.mimeType = mimeType
-    }
+
 }

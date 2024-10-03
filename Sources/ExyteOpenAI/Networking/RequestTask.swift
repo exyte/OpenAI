@@ -29,5 +29,5 @@ public enum RequestTask {
     case JSONEncodable(Encodable)
     case URLParametersEncodable(Encodable)
     case uploadMultipart([FormBodyPart])
-    case download(URL)
+    case download(Encodable?, URL)
 }

@@ -74,7 +74,7 @@ extension Files: EndpointConfiguration {
         case .listFiles, .retrieveFile, .deleteFile:
             return .plain
         case .retrieveFileContent(_, let destination):
-            return .download(destination)
+            return .download(nil, destination)
         }
     }
     
