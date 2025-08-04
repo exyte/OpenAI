@@ -1,5 +1,5 @@
 //
-//  FormBodyPart.swift
+//  SpeechVoice.swift
 //
 //  Copyright (c) 2024 Exyte
 //
@@ -24,25 +24,13 @@
 
 import Foundation
 
-public struct FormBodyPart {
-    
-    public enum Value {
-        case fileURL(URL)
-        case data(Data)
-        case plainText(String)
-        case integer(Int)
-        case floatingPoint(Double)
-    }
-    
-    public let name: String
-    public let value: Value
-    public let fileName: String?
-    public let mimeType: String?
-    
-    init(name: String, value: Value, fileName: String? = nil, mimeType: String? = nil) {
-        self.name = name
-        self.value = value
-        self.fileName = fileName
-        self.mimeType = mimeType
-    }
+public enum SpeechVoice: String, Codable {
+
+    case alloy = "alloy"
+    case echo = "echo"
+    case fable = "fable"
+    case onyx = "onyx"
+    case nova = "nova"
+    case shimmer = "shimmer"
+
 }
